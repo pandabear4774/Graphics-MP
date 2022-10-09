@@ -4,6 +4,7 @@
 #include <CSCI441/objects.hpp>
 #include <CSCI441/FreeCam.hpp>
 
+
 //*************************************************************************************
 //
 // Helper Functions
@@ -23,9 +24,9 @@ GLfloat getRand() {
 // Public Interface
 
 A3Engine::A3Engine()
-         : CSCI441::OpenGLEngine(4, 1,
-                                 640, 480,
-                                 "Lab05: Flight Simulator v0.41 alpha") {
+        : CSCI441::OpenGLEngine(4, 1,
+                                640, 480,
+                                "Lab05: Flight Simulator v0.41 alpha") {
 
     for(auto& _key : _keys) _key = GL_FALSE;
 
@@ -39,10 +40,14 @@ A3Engine::A3Engine()
     _leftPaddleAngle = 0;
     _rightPaddleAngle = 0;
 
+    _freeCamPos = glm::vec3(60.0f, 40.0f, 30.0f);
+    _freeCamTheta = -M_PI / 3.0f;
+    _freeCamPhi = M_PI / 2.8f;
+
 }
 
 A3Engine::~A3Engine() {
-    delete _arcBallCam;
+    delete _camera;
 }
 
 void A3Engine::handleKeyEvent(GLint key, GLint action) {
@@ -80,10 +85,10 @@ void A3Engine::handleCursorPositionEvent(glm::vec2 currMousePosition) {
     if(_leftMouseButtonState == GLFW_PRESS) {
         // rotate the camera by the distance the mouse moved
 
-        _arcBallCam->rotate((currMousePosition.x - _mousePosition.x) * 0.005f,
-                         (_mousePosition.y - currMousePosition.y) * 0.005f );
+        _camera->rotate((currMousePosition.x - _mousePosition.x) * 0.005f,
+                        (_mousePosition.y - currMousePosition.y) * 0.005f );
 
-        _arcBallCam->recomputeOrientation();
+        _camera->recomputeOrientation();
 
 
     }
@@ -300,20 +305,33 @@ void A3Engine::_paddleBackward() {
 }
 
 void A3Engine::_setupScene() {
-    // Create new arcball cam
-    _arcBallCam = new ArcBallCam();
-
-    // set the lookout point to be at the raft
-    _arcBallCam->setLookAtPoint(glm::vec3(_raftPositionX,0.0 , _raftPositionZ));
-
-    // set initial radius and angles
-    _arcBallCam->setRadius(100);
-    _arcBallCam->setTheta( 3);
-    _arcBallCam->setPhi(2);
-    _arcBallCam->recomputeOrientation();
+    _changeToFreeCam();
     _cameraSpeed = glm::vec2(0.25f, 0.02f);
 
 
+}
+
+void A3Engine::_changeToFreeCam() {
+    _camera = new CSCI441::FreeCam();
+    _camera->setPosition( _freeCamPos );
+    _camera->setTheta( _freeCamTheta );
+    _camera->setPhi( _freeCamPhi);
+    _camera->recomputeOrientation();
+}
+
+void A3Engine::_changeToArcBallCam() {
+
+    // Create new arcball cam
+    _camera = new ArcBallCam();
+
+    // set the lookout point to be at the raft
+    _camera->setLookAtPoint(glm::vec3(_raftPositionX,0.0 , _raftPositionZ));
+
+    // set initial radius and angles
+    _camera->setRadius(30);
+    _camera->setTheta( 1);
+    _camera->setPhi(2);
+    _camera->recomputeOrientation();
 }
 
 //*************************************************************************************
@@ -364,7 +382,7 @@ void A3Engine::_renderScene(glm::mat4 viewMtx, glm::mat4 projMtx) const {
         glUniform3fv(_lightingShaderUniformLocations.materialColor, 1, &currentBuoy.color[0]);
 
         CSCI441::drawSolidSphere(1.0, 100,100);
-        
+
     }
     //// END DRAWING THE BUOYS ////
 
@@ -413,11 +431,11 @@ void A3Engine::_updateScene() {
     if( _keys[GLFW_KEY_SPACE] ) {
         // go backward if shift held down
         if( _keys[GLFW_KEY_LEFT_SHIFT] || _keys[GLFW_KEY_RIGHT_SHIFT] ) {
-            _arcBallCam->moveBackward(_cameraSpeed.x);
+            _camera->moveBackward(_cameraSpeed.x);
         }
-        // go forward
+            // go forward
         else {
-            _arcBallCam->moveForward(_cameraSpeed.x);
+            _camera->moveForward(_cameraSpeed.x);
         }
     }
     // turn right
@@ -437,8 +455,8 @@ void A3Engine::_updateScene() {
         _paddleForwardRight();
 
         // update lookatPoint and recompute orientation
-        _arcBallCam->setLookAtPoint(glm::vec3(_raftPositionX, 0, _raftPositionZ));
-        _arcBallCam->recomputeOrientation();
+        _camera->setLookAtPoint(glm::vec3(_raftPositionX, 0, _raftPositionZ));
+        _camera->recomputeOrientation();
     }
     // go backward
     if( _keys[GLFW_KEY_S] ) {
@@ -446,8 +464,20 @@ void A3Engine::_updateScene() {
         _paddleBackward();
 
         // update lookout point and recomputer orientation
-        _arcBallCam->setLookAtPoint(glm::vec3(_raftPositionX, 0, _raftPositionZ));
-        _arcBallCam->recomputeOrientation();
+        _camera->setLookAtPoint(glm::vec3(_raftPositionX, 0, _raftPositionZ));
+        _camera->recomputeOrientation();
+    }
+
+    if( _keys[GLFW_KEY_1]){
+        _camera->recomputeOrientation();
+        _freeCamPos = _camera->getPosition();
+        _freeCamTheta = _camera->getTheta();
+        _freeCamPhi = _camera->getPhi();
+        _changeToArcBallCam();
+    }
+
+    if( _keys[GLFW_KEY_2]){
+        _changeToFreeCam();
     }
 }
 
@@ -474,7 +504,7 @@ void A3Engine::run() {
         glm::mat4 projectionMatrix = glm::perspective( 45.0f, (GLfloat) framebufferWidth / (GLfloat) framebufferHeight, 0.001f, 1000.0f );
 
         // set up our look at matrix to position our camera
-        glm::mat4 viewMatrix = _arcBallCam->getViewMatrix();
+        glm::mat4 viewMatrix = _camera->getViewMatrix();
 
         // draw everything to the window
         _renderScene(viewMatrix, projectionMatrix);

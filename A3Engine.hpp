@@ -5,8 +5,6 @@
 #include <CSCI441/OpenGLEngine.hpp>
 #include <CSCI441/ShaderProgram.hpp>
 
-#include "Plane.hpp"
-
 #include <vector>
 
 class A3Engine : public CSCI441::OpenGLEngine {
@@ -50,6 +48,13 @@ private:
     /// \desc handles moving our FreeCam as determined by keyboard input
     void _updateScene();
 
+    void _changeToFreeCam();
+    void _changeToArcBallCam();
+
+    glm::vec3 _freeCamPos;
+    GLfloat _freeCamTheta;
+    GLfloat _freeCamPhi;
+
     /// \desc tracks the number of different keys that can be present as determined by GLFW
     static constexpr GLuint NUM_KEYS = GLFW_KEY_LAST;
     /// \desc boolean array tracking each key state.  if true, then the key is in a pressed or held
@@ -62,7 +67,7 @@ private:
     GLint _leftMouseButtonState;
 
     /// \desc the static fixed camera in our world
-    CSCI441::Camera* _arcBallCam;
+    CSCI441::Camera* _camera;
     /// \desc pair of values to store the speed the camera can move/rotate.
     /// \brief x = forward/backward delta, y = rotational delta
     glm::vec2 _cameraSpeed;

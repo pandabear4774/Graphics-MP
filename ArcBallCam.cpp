@@ -7,6 +7,7 @@
 
 #include <cmath>
 
+
 void ArcBallCam::recomputeOrientation() {
 
     // update camera position based on the radius, theta and phi, and the look at point
