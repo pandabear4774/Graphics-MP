@@ -3,6 +3,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/lab05.dir/ArcBallCam.cpp.o"
   "CMakeFiles/lab05.dir/Plane.cpp.o"
   "CMakeFiles/lab05.dir/Raft.cpp.o"
+  "CMakeFiles/lab05.dir/Vehicle.cpp.o"
   "CMakeFiles/lab05.dir/main.cpp.o"
   "lab05"
   "lab05.pdb"

@@ -37,7 +37,7 @@ Plane::Plane( GLuint shaderProgramHandle, GLint mvpMtxUniformLocation, GLint nor
 
     _colorTail = glm::vec3( 1.0f, 1.0f, 0.0f );
 
-    _planeLocation = glm::vec3(0,10,0);
+    _location = glm::vec3(0,10,0);
     _direction = -M_PI;
     speed = 0.1;
 }
@@ -58,23 +58,23 @@ void Plane::drawPlane( glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx 
 
 void Plane::flyForward() {
     //change x cord based on the cos of the direction
-    _planeLocation.x += speed * cos(_direction);
+    _location.x += speed * cos(_direction);
 
     //check to make sure that the plane is inside the bounds
-    if(_planeLocation.x > 55.0f){
-        _planeLocation.x = 55.0f;
-    } else if(_planeLocation.x < -55.0f){
-        _planeLocation.x = -55.0f;
+    if(_location.x > 55.0f){
+        _location.x = 55.0f;
+    } else if(_location.x < -55.0f){
+        _location.x = -55.0f;
     }
 
     //update the z axis as well
-    _planeLocation.z += speed * sin(_direction);
+    _location.z += speed * sin(_direction);
 
     //make sure the z axis is also within the bounds
-    if(_planeLocation.z > 55.0f){
-        _planeLocation.z = 55.0f;
-    } else if(_planeLocation.z < -55.0f){
-        _planeLocation.z = -55.0f;
+    if(_location.z > 55.0f){
+        _location.z = 55.0f;
+    } else if(_location.z < -55.0f){
+        _location.z = -55.0f;
     }
 
     //animate the propeller
@@ -84,23 +84,23 @@ void Plane::flyForward() {
 
 void Plane::flyBackward() {
     //change the x location
-    _planeLocation.x -= speed * cos(_direction);
+    _location.x -= speed * cos(_direction);
 
     //make sure that the plane stays in bounds when flying backwards
-    if(_planeLocation.x > 55.0f){
-        _planeLocation.x = 55.0f;
-    } else if(_planeLocation.x < -55.0f){
-        _planeLocation.x = -55.0f;
+    if(_location.x > 55.0f){
+        _location.x = 55.0f;
+    } else if(_location.x < -55.0f){
+        _location.x = -55.0f;
     }
 
     //change the z location
-    _planeLocation.z -= speed * sin(_direction);
+    _location.z -= speed * sin(_direction);
 
     //check inside the map
-    if(_planeLocation.z > 55.0f){
-        _planeLocation.z = 55.0f;
-    } else if(_planeLocation.z < -55.0f){
-        _planeLocation.z = -55.0f;
+    if(_location.z > 55.0f){
+        _location.z = 55.0f;
+    } else if(_location.z < -55.0f){
+        _location.z = -55.0f;
     }
 
     //animate the propellers

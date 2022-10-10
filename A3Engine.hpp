@@ -64,6 +64,8 @@ private:
     /// \desc current state of the left mouse button
     GLint _leftMouseButtonState;
 
+    Vehicle* _currVehicle;
+
     Plane* _plane;
     /// \desc the static fixed camera in our world
     CSCI441::Camera* _camera;

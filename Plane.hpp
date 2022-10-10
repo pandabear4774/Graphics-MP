@@ -4,8 +4,10 @@
 #include <GL/glew.h>
 
 #include <glm/glm.hpp>
+#include "Vehicle.h"
 
-class Plane {
+
+class Plane: public Vehicle {
 public:
     /// \desc creates a simple plane that gives the appearance of flight
     /// \param shaderProgramHandle shader program handle that the plane should be drawn using
@@ -27,7 +29,6 @@ public:
     /// \desc simulates the plane flying backward by rotating the propeller counter-clockwise
     void flyBackward();
 
-    glm::vec3 _planeLocation;
     GLfloat _direction;
     GLfloat speed;
 

@@ -16,8 +16,10 @@
 
 Raft::Raft(GLuint shaderProgramHandle, GLint mvpMtxUniformLocation, GLint normMtx, GLint materialColorUniformLocation ){
     _angle = 0.0;
+
     _positionX = 0;
     _positionZ = 10;
+    _location = {_positionX,0,_positionZ};
 
     _leftPaddleAngle = 0;
     _rightPaddleAngle = 0;
@@ -130,7 +132,7 @@ void Raft::_moveForward(GLfloat WORLD_SIZE){
     // If the raft isn't at the edge of the world, update it's x and z position according to the angle to move it forward
     if(_positionX + 0.1*sin(_angle)< WORLD_SIZE - 10 && _positionX + 0.1*sin(_angle)> -WORLD_SIZE + 10) {_positionX += 0.1*sin(_angle);}
     if(_positionZ + 0.1*cos(_angle)< WORLD_SIZE - 10 && _positionZ + 0.1*cos(_angle) > -WORLD_SIZE + 10) {_positionZ += 0.1*cos(_angle);}
-
+    _location = {_positionX, 0, _positionZ};
 }
 
 void Raft::_moveBackward(GLfloat WORLD_SIZE){
@@ -139,6 +141,7 @@ void Raft::_moveBackward(GLfloat WORLD_SIZE){
     // If the raft isn't at the edge of the world, update it's x and z position according to the angle to move it backward
     if(_positionX - 0.1*sin(_angle)< WORLD_SIZE - 10 && _positionX - 0.1*sin(_angle)> -WORLD_SIZE + 10){_positionX -= 0.1*sin(_angle);}
     if(_positionZ - 0.1*cos(_angle)< WORLD_SIZE - 10 && _positionZ - 0.1*cos(_angle)> -WORLD_SIZE + 10){_positionZ -= 0.1*cos(_angle);}
+    _location = {_positionX, 0, _positionZ};
 }
 
 void Raft::_rotateRight() {

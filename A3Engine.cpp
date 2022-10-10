@@ -138,6 +138,8 @@ void A3Engine::_setupBuffers() {
                        _lightingShaderUniformLocations.normMtx,
                        _lightingShaderUniformLocations.materialColor);
 
+    _currVehicle = _raft;
+
     _createGroundBuffers();
     _generateEnvironment();
 
@@ -254,7 +256,7 @@ void A3Engine::_changeToArcBallCam() {
     _camera = new ArcBallCam();
 
     // set the lookout point to be at the raft
-    _camera->setLookAtPoint(glm::vec3(_raft->_positionX,0.0 , _raft->_positionZ));
+    _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,0.0 , _raft->_location.z));
 
     // set initial radius and angles
     _camera->setRadius(30);
@@ -306,7 +308,7 @@ void A3Engine::_renderScene(glm::mat4 viewMtx, glm::mat4 projMtx) const {
     //DRAWING THE PLANE
     glm::mat4 modelMtx(1.0f);
     // we are going to cheat and use our look at point to place our plane so that it is always in view
-    modelMtx = glm::translate( modelMtx, _plane->_planeLocation );
+    modelMtx = glm::translate( modelMtx, _plane->_location );
     // rotate the plane with our camera theta direction (we need to rotate the opposite direction so that we always look at the back)
     float pie2 = M_PI / 2.0f;
 
@@ -346,51 +348,90 @@ void A3Engine::_updateScene() {
     }
     // turn right
     if( _keys[GLFW_KEY_D] ) {
-        _raft->_rotateRight();
-        _raft->_paddleForwardLeft();
+        if (_currVehicle == _raft) {
+            _raft->_rotateRight();
+            _raft->_paddleForwardLeft();
+        }
 
-        _plane->_direction += _plane->speed / 5.0f;
-        if(_plane->_direction > M_PI * 2.0f){
-            _plane->_direction -= M_PI * 2.0f;
+
+        if (_currVehicle == _plane) {
+            _plane->_direction += _plane->speed / 5.0f;
+            if (_plane->_direction > M_PI * 2.0f) {
+                _plane->_direction -= M_PI * 2.0f;
+            }
         }
     }
     // turn left
     if( _keys[GLFW_KEY_A] ) {
-        _raft->_rotateLeft();
-        _raft->_paddleForwardRight();
+        if(_currVehicle == _raft) {
+            _raft->_rotateLeft();
+            _raft->_paddleForwardRight();
+        }
 
-        _plane->_direction -= _plane->speed / 5.0f;
-        if(_plane->_direction < 0.0f){
-            _plane->_direction += M_PI * 2.0f;
+        if(_currVehicle == _plane) {
+            _plane->_direction -= _plane->speed / 5.0f;
+            if (_plane->_direction < 0.0f) {
+                _plane->_direction += M_PI * 2.0f;
+            }
         }
     }
     // go forward
     if( _keys[GLFW_KEY_W] ) {
-        _raft->_moveForward(WORLD_SIZE);
-        _raft->_paddleForwardLeft();
-        _raft->_paddleForwardRight();
+        if(_currVehicle == _raft) {
+            _raft->_moveForward(WORLD_SIZE);
+            _raft->_paddleForwardLeft();
+            _raft->_paddleForwardRight();
+        }
+
+        if(_currVehicle == _plane){
+            _plane->flyForward();
+        }
 
         // update lookatPoint and recompute orientation
-        _camera->setLookAtPoint(glm::vec3(_raft->_positionX,0.0 , _raft->_positionZ));
+        _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,0.0 , _currVehicle->_location.z));
         _camera->recomputeOrientation();
     }
     // go backward
     if( _keys[GLFW_KEY_S] ) {
-        _raft->_moveBackward(WORLD_SIZE);
-        _raft->_paddleBackward();
+        if(_currVehicle == _raft){
+            _raft->_moveBackward(WORLD_SIZE);
+            _raft->_paddleBackward();
+        }
+
+        if(_currVehicle == _plane){
+            _plane->flyForward();
+        }
+
 
         // update lookout point and recomputer orientation
-        _camera->setLookAtPoint(glm::vec3(_raft->_positionX,0.0 , _raft->_positionZ));
+        _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,0.0 , _currVehicle->_location.z));
         _camera->recomputeOrientation();
     }
 
     if( _keys[GLFW_KEY_1]){
-        _camera->recomputeOrientation();
-        _changeToArcBallCam();
+        _currVehicle = _raft;
+
     }
 
     if( _keys[GLFW_KEY_2]){
+        _currVehicle = _plane;
+
+    }
+    if( _keys[GLFW_KEY_3]){
+        // _currVehicle = last vehicle;
+
+    }
+
+    if(_keys[GLFW_KEY_4]){
+        _changeToArcBallCam();
+    }
+
+    if(_keys[GLFW_KEY_5]){
         _changeToFreeCam();
+    }
+
+    if(_keys[GLFW_KEY_6]){
+        // add POV cam
     }
 }
 

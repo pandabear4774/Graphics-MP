@@ -8,8 +8,9 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <vector>
+#include "Vehicle.h"
 
-class Raft {
+class Raft: public Vehicle{
 public:
     Raft(GLuint shaderProgramHandle, GLint mvpMtxUniformLocation, GLint normMtx, GLint materialColorUniformLocation );
 

@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/ArcBallCam.cpp" "/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/cmake-build-debug/CMakeFiles/lab05.dir/ArcBallCam.cpp.o"
   "/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/Plane.cpp" "/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/cmake-build-debug/CMakeFiles/lab05.dir/Plane.cpp.o"
   "/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/Raft.cpp" "/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/cmake-build-debug/CMakeFiles/lab05.dir/Raft.cpp.o"
+  "/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/Vehicle.cpp" "/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/cmake-build-debug/CMakeFiles/lab05.dir/Vehicle.cpp.o"
   "/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/main.cpp" "/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/cmake-build-debug/CMakeFiles/lab05.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "AppleClang")

@@ -251,6 +251,33 @@ Raft.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab05.dir/build.make CMakeFiles/lab05.dir/Raft.cpp.s
 .PHONY : Raft.cpp.s
 
+Vehicle.o: Vehicle.cpp.o
+
+.PHONY : Vehicle.o
+
+# target to build an object file
+Vehicle.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab05.dir/build.make CMakeFiles/lab05.dir/Vehicle.cpp.o
+.PHONY : Vehicle.cpp.o
+
+Vehicle.i: Vehicle.cpp.i
+
+.PHONY : Vehicle.i
+
+# target to preprocess a source file
+Vehicle.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab05.dir/build.make CMakeFiles/lab05.dir/Vehicle.cpp.i
+.PHONY : Vehicle.cpp.i
+
+Vehicle.s: Vehicle.cpp.s
+
+.PHONY : Vehicle.s
+
+# target to generate assembly for a file
+Vehicle.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab05.dir/build.make CMakeFiles/lab05.dir/Vehicle.cpp.s
+.PHONY : Vehicle.cpp.s
+
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -299,6 +326,9 @@ help:
 	@echo "... Raft.o"
 	@echo "... Raft.i"
 	@echo "... Raft.s"
+	@echo "... Vehicle.o"
+	@echo "... Vehicle.i"
+	@echo "... Vehicle.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

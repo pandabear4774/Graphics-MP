@@ -104,6 +104,12 @@
 		<Unit filename="/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/Raft.hpp">
 			<Option target="lab05"/>
 		</Unit>
+		<Unit filename="/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/Vehicle.cpp">
+			<Option target="lab05"/>
+		</Unit>
+		<Unit filename="/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/Vehicle.h">
+			<Option target="lab05"/>
+		</Unit>
 		<Unit filename="/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/main.cpp">
 			<Option target="lab05"/>
 		</Unit>
