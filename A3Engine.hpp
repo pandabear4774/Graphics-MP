@@ -6,6 +6,7 @@
 #include <CSCI441/ShaderProgram.hpp>
 
 #include <vector>
+#include "Raft.h"
 
 class A3Engine : public CSCI441::OpenGLEngine {
 public:
@@ -51,10 +52,6 @@ private:
     void _changeToFreeCam();
     void _changeToArcBallCam();
 
-    glm::vec3 _freeCamPos;
-    GLfloat _freeCamTheta;
-    GLfloat _freeCamPhi;
-
     /// \desc tracks the number of different keys that can be present as determined by GLFW
     static constexpr GLuint NUM_KEYS = GLFW_KEY_LAST;
     /// \desc boolean array tracking each key state.  if true, then the key is in a pressed or held
@@ -72,29 +69,7 @@ private:
     /// \brief x = forward/backward delta, y = rotational delta
     glm::vec2 _cameraSpeed;
 
-    GLfloat _raftPositionX;
-
-    GLfloat _raftPositionZ;
-
-    GLfloat _raftAngle;
-
-    GLfloat _leftPaddleAngle;
-
-    GLfloat _rightPaddleAngle;
-
-    void _moveForward();
-
-    void _moveBackward();
-
-    void _rotateRight();
-
-    void _rotateLeft();
-
-    void _paddleForwardLeft();
-
-    void _paddleForwardRight();
-
-    void _paddleBackward();
+    Raft* _raft;
 
 
 
@@ -113,29 +88,13 @@ private:
         glm::vec3 color;
     };
 
-    struct LogData {
-        glm::mat4 modelMatrix;
-
-        glm::vec3 color;
-    };
-
-    struct OarData {
-        glm::mat4 modelMatrix;
-        glm::vec3 color;
-    };
-
-    std::vector<LogData> _logs;
 
     std::vector<BuoyData> _buoys;
 
-    std::vector<OarData> _oars;
 
     /// \desc generates building information to make up our scene
     void _generateEnvironment();
 
-    void _setupLogs();
-
-    void _setupOars();
 
     /// \desc shader program that performs lighting
     CSCI441::ShaderProgram* _lightingShaderProgram = nullptr;   // the wrapper for our shader program

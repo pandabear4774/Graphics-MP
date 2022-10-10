@@ -1,8 +1,11 @@
 #include "A3Engine.hpp"
 #include "ArcBallCam.h"
+#include "Raft.h"
 
 #include <CSCI441/objects.hpp>
 #include <CSCI441/FreeCam.hpp>
+
+
 
 
 //*************************************************************************************
@@ -11,6 +14,7 @@
 
 #ifndef M_PI
 #define M_PI 3.14159265
+
 
 #endif
 
@@ -32,17 +36,6 @@ A3Engine::A3Engine()
 
     _mousePosition = glm::vec2(MOUSE_UNINITIALIZED, MOUSE_UNINITIALIZED );
     _leftMouseButtonState = GLFW_RELEASE;
-
-    _raftAngle = 0.0;
-    _raftPositionX = 0;
-    _raftPositionZ = 10;
-
-    _leftPaddleAngle = 0;
-    _rightPaddleAngle = 0;
-
-    _freeCamPos = glm::vec3(60.0f, 40.0f, 30.0f);
-    _freeCamTheta = -M_PI / 3.0f;
-    _freeCamPhi = M_PI / 2.8f;
 
 }
 
@@ -130,12 +123,14 @@ void A3Engine::_setupShaders() {
 }
 
 void A3Engine::_setupBuffers() {
-    CSCI441::setVertexAttributeLocations( _lightingShaderAttributeLocations.vPos );
+    CSCI441::setVertexAttributeLocations( _lightingShaderAttributeLocations.vPos);
+
+    _raft = new Raft(_lightingShaderProgram->getShaderProgramHandle(),
+            _lightingShaderUniformLocations.mvpMatrix,
+            _lightingShaderUniformLocations.materialColor);
 
     _createGroundBuffers();
     _generateEnvironment();
-    _setupLogs();
-    _setupOars();
 }
 
 void A3Engine::_createGroundBuffers() {
@@ -219,91 +214,6 @@ void A3Engine::_generateEnvironment() {
     }
 }
 
-void A3Engine::_setupLogs() {
-    // generate 5 logs to make up the raft
-    for(int i = 0; i < 5; i++){
-
-        // Position them next to each other and above the water
-        glm::mat4 positionMtx = glm::translate(glm::mat4(1.0), glm::vec3(i,0.5,0) );
-
-        // rotate so they lie flat in the water
-        glm::mat4 orientMtx = glm::rotate(glm::mat4(1.0), (float) M_PI/2, glm::vec3(1,0,0));
-
-        // calculate model matrix
-        glm:: mat4 modelMtx = positionMtx * orientMtx;
-
-        // give them a color
-        glm::vec3 color = glm::vec3(0.2,0.0,0.0);
-
-        // store log properties
-        LogData currentLog = {modelMtx, color};
-        _logs.emplace_back(currentLog);
-    }
-
-}
-
-void A3Engine::_setupOars() {
-
-    // position left oar and compute model matrix
-    glm::mat4 positionMtx = glm::translate(glm::mat4(1.0), glm::vec3(-0.5,2,5));
-    glm::mat4 orientMtx = glm::rotate(glm::mat4(1.0), (float) (M_PI/2+0.41), glm::vec3(0,0,1));
-    glm::mat4 modelMtx = positionMtx * orientMtx;
-
-    // give oar a color
-    glm::vec3 color = glm::vec3(0,0,0.2);
-
-    // store left oar properties
-    OarData leftLog = {modelMtx, color};
-    _oars.emplace_back(leftLog);
-
-    // do the same for right oar
-    positionMtx = glm::translate(glm::mat4(1.0), glm::vec3(4.5,2,5));
-    orientMtx = glm::rotate(glm::mat4(1.0), (float) (-M_PI/2-0.41), glm::vec3(0,0,1));
-    modelMtx = positionMtx * orientMtx;
-
-    OarData rightLog = {modelMtx, color};
-    _oars.emplace_back(rightLog);
-}
-
-void A3Engine::_moveForward(){
-    // If the raft isn't at the edge of the world, update it's x and z position according to the angle to move it forward
-    if(_raftPositionX + 0.1*sin(_raftAngle)< WORLD_SIZE - 10 && _raftPositionX + 0.1*sin(_raftAngle)> -WORLD_SIZE + 10) {_raftPositionX += 0.1*sin(_raftAngle);}
-    if(_raftPositionZ + 0.1*cos(_raftAngle)< WORLD_SIZE - 10 && _raftPositionZ + 0.1*cos(_raftAngle) > -WORLD_SIZE + 10) {_raftPositionZ += 0.1*cos(_raftAngle);}
-
-}
-
-void A3Engine::_moveBackward(){
-    // If the raft isn't at the edge of the world, update it's x and z position according to the angle to move it backward
-    if(_raftPositionX - 0.1*sin(_raftAngle)< WORLD_SIZE - 10 && _raftPositionX - 0.1*sin(_raftAngle)> -WORLD_SIZE + 10){_raftPositionX -= 0.1*sin(_raftAngle);}
-    if(_raftPositionZ - 0.1*cos(_raftAngle)< WORLD_SIZE - 10 && _raftPositionZ - 0.1*cos(_raftAngle)> -WORLD_SIZE + 10){_raftPositionZ -= 0.1*cos(_raftAngle);}
-}
-
-void A3Engine::_rotateRight() {
-    // increase the raft angle, pointing the raft right
-    _raftAngle -= 0.01;
-}
-
-void A3Engine::_rotateLeft(){
-    // decrease the raft angle, pointing the raft left
-    _raftAngle += 0.01;
-};
-
-void A3Engine::_paddleForwardLeft() {
-    // update the angle of the left oar, called when raft is moving forward or turning right
-    _leftPaddleAngle += .1;
-}
-
-void A3Engine::_paddleForwardRight() {
-    // update the angle of the right oar, called when raft in moving forward or turning left
-    _rightPaddleAngle += .1;
-}
-
-void A3Engine::_paddleBackward() {
-    // if moving backward, update both oars position
-    _leftPaddleAngle -= .1;
-    _rightPaddleAngle -= .1;
-}
-
 void A3Engine::_setupScene() {
     _changeToFreeCam();
     _cameraSpeed = glm::vec2(0.25f, 0.02f);
@@ -313,9 +223,9 @@ void A3Engine::_setupScene() {
 
 void A3Engine::_changeToFreeCam() {
     _camera = new CSCI441::FreeCam();
-    _camera->setPosition( _freeCamPos );
-    _camera->setTheta( _freeCamTheta );
-    _camera->setPhi( _freeCamPhi);
+    _camera->setPosition( glm::vec3(1.5*WORLD_SIZE, 40.0f, 1*WORLD_SIZE) );
+    _camera->setTheta(-M_PI/3 );
+    _camera->setPhi(M_PI/2.8);
     _camera->recomputeOrientation();
 }
 
@@ -325,7 +235,7 @@ void A3Engine::_changeToArcBallCam() {
     _camera = new ArcBallCam();
 
     // set the lookout point to be at the raft
-    _camera->setLookAtPoint(glm::vec3(_raftPositionX,0.0 , _raftPositionZ));
+    _camera->setLookAtPoint(glm::vec3(_raft->_positionX, 0, _raft->_positionZ));
 
     // set initial radius and angles
     _camera->setRadius(30);
@@ -386,43 +296,7 @@ void A3Engine::_renderScene(glm::mat4 viewMtx, glm::mat4 projMtx) const {
     }
     //// END DRAWING THE BUOYS ////
 
-    // rotate and transform the raft according to current position and angle
-    glm::mat4 transMtx = glm::translate(glm::mat4(1.0), glm::vec3(_raftPositionX,0,_raftPositionZ) );
-    glm::mat4 rotateMtx = glm::rotate(glm::mat4(1.0), _raftAngle, glm::vec3(0,1,0));
-
-    // Draw the logs
-    for(const LogData& currentLog : _logs){
-        glm::mat4 logModelMtx = transMtx * rotateMtx * currentLog.modelMatrix;
-        _computeAndSendMatrixUniforms(logModelMtx,viewMtx,projMtx);
-
-        glUniform3fv(_lightingShaderUniformLocations.materialColor,1,&currentLog.color[0]);
-        CSCI441::drawSolidCylinder(0.5,0.5,10.0,100,100);
-    }
-
-    // Rotate the oars in x direction according to current angle to paddle. Translate in z direction to get rowing effect
-    glm::mat4 leftRotateX = glm::rotate(glm::mat4(1.0), (float) 0.2*sin(_leftPaddleAngle), glm::vec3(1,0,0));
-    glm::mat4 leftTransZ = glm::translate(glm::mat4(1.0), glm::vec3(0,-0.5*cos(_leftPaddleAngle+M_PI/4),cos(_leftPaddleAngle)));
-    glm::mat4 rightRotateX = glm::rotate(glm::mat4(1.0), (float) 0.2*sin(_rightPaddleAngle), glm::vec3(1,0,0));
-    glm::mat4 rightTransZ = glm::translate(glm::mat4(1.0), glm::vec3(0,-0.5*cos(_rightPaddleAngle + M_PI/4),cos(_rightPaddleAngle)));
-
-
-    // Draw right oar
-    OarData rightOar = _oars[0];
-    glm::mat4 rightOarModelMtx =  transMtx *  rotateMtx  * rightOar.modelMatrix * rightTransZ * rightRotateX;
-
-    _computeAndSendMatrixUniforms(rightOarModelMtx,viewMtx,projMtx);
-
-    glUniform3fv(_lightingShaderUniformLocations.materialColor,1,&rightOar.color[0]);
-    CSCI441::drawSolidCylinder(0.2,0.2,5.0,50,50);
-
-    // Draw left oar
-    OarData leftOar = _oars[1];
-    glm::mat4 leftOarModelMtx = transMtx  * rotateMtx  * leftOar.modelMatrix * leftTransZ * leftRotateX;
-
-    _computeAndSendMatrixUniforms(leftOarModelMtx,viewMtx,projMtx);
-
-    glUniform3fv(_lightingShaderUniformLocations.materialColor,1,&leftOar.color[0]);
-    CSCI441::drawSolidCylinder(0.2,0.2,5.0,50,50);
+    _raft->_drawRaft(viewMtx, projMtx);
 
 }
 
@@ -440,39 +314,36 @@ void A3Engine::_updateScene() {
     }
     // turn right
     if( _keys[GLFW_KEY_D] ) {
-        _rotateRight();
-        _paddleForwardLeft();
+        _raft->_rotateRight();
+        _raft->_paddleForwardLeft();
     }
     // turn left
     if( _keys[GLFW_KEY_A] ) {
-        _rotateLeft();
-        _paddleForwardRight();
+        _raft->_rotateLeft();
+        _raft->_paddleForwardRight();
     }
     // go forward
     if( _keys[GLFW_KEY_W] ) {
-        _moveForward();
-        _paddleForwardLeft();
-        _paddleForwardRight();
+        _raft->_moveForward(WORLD_SIZE);
+        _raft->_paddleForwardLeft();
+        _raft->_paddleForwardRight();
 
         // update lookatPoint and recompute orientation
-        _camera->setLookAtPoint(glm::vec3(_raftPositionX, 0, _raftPositionZ));
+        _camera->setLookAtPoint(glm::vec3(_raft->_positionX, 0, _raft->_positionZ));
         _camera->recomputeOrientation();
     }
     // go backward
     if( _keys[GLFW_KEY_S] ) {
-        _moveBackward();
-        _paddleBackward();
+        _raft->_moveBackward(WORLD_SIZE);
+        _raft->_paddleBackward();
 
         // update lookout point and recomputer orientation
-        _camera->setLookAtPoint(glm::vec3(_raftPositionX, 0, _raftPositionZ));
+        _camera->setLookAtPoint(glm::vec3(_raft->_positionX, 0, _raft->_positionZ));
         _camera->recomputeOrientation();
     }
 
     if( _keys[GLFW_KEY_1]){
         _camera->recomputeOrientation();
-        _freeCamPos = _camera->getPosition();
-        _freeCamTheta = _camera->getTheta();
-        _freeCamPhi = _camera->getPhi();
         _changeToArcBallCam();
     }
 
