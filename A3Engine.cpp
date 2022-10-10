@@ -124,13 +124,24 @@ void A3Engine::_setupShaders() {
     _lightingShaderProgram = new CSCI441::ShaderProgram("shaders/lab05.v.glsl", "shaders/lab05.f.glsl" );
     _lightingShaderUniformLocations.mvpMatrix      = _lightingShaderProgram->getUniformLocation("mvpMatrix");
     _lightingShaderUniformLocations.materialColor  = _lightingShaderProgram->getUniformLocation("materialColor");
+    // TODO #3A: assign uniforms
+    _lightingShaderUniformLocations.normMtx        = _lightingShaderProgram->getUniformLocation("normMatrix");
+    _lightingShaderUniformLocations.lightDirection = _lightingShaderProgram->getUniformLocation("lightDir");
+    _lightingShaderUniformLocations.lightColor     = _lightingShaderProgram->getUniformLocation("lightColor");
 
     _lightingShaderAttributeLocations.vPos         = _lightingShaderProgram->getAttributeLocation("vPos");
+    // TODO #3B: assign attributes
+    _lightingShaderAttributeLocations.vecNormal    = _lightingShaderProgram->getAttributeLocation("vecNormal");
 
 }
 
 void A3Engine::_setupBuffers() {
-    CSCI441::setVertexAttributeLocations( _lightingShaderAttributeLocations.vPos );
+    CSCI441::setVertexAttributeLocations( _lightingShaderAttributeLocations.vPos,  _lightingShaderAttributeLocations.vecNormal);
+
+    _plane = new Plane(_lightingShaderProgram->getShaderProgramHandle(),
+                       _lightingShaderUniformLocations.mvpMatrix,
+                       _lightingShaderUniformLocations.normMtx,
+                       _lightingShaderUniformLocations.materialColor);
 
     _createGroundBuffers();
     _generateEnvironment();
@@ -141,14 +152,15 @@ void A3Engine::_setupBuffers() {
 void A3Engine::_createGroundBuffers() {
     struct Vertex {
         GLfloat x, y, z;
+        GLfloat normalX, normalY, normalZ;
 
     };
 
     Vertex groundQuad[4] = {
-            {-1.0f, 0.0f, -1.0f},
-            { 1.0f, 0.0f, -1.0f},
-            {-1.0f, 0.0f,  1.0f},
-            { 1.0f, 0.0f,  1.0f}
+            {-1.0f, 0.0f, -1.0f,-1.0,1.0,-1.0},
+            { 1.0f, 0.0f, -1.0f,1.0,1.0,-1.0},
+            {-1.0f, 0.0f,  1.0f,-1.0,1.0,1.0},
+            { 1.0f, 0.0f,  1.0f,1.0,1.0,1.0}
     };
 
     GLushort indices[4] = {0,1,2,3};
@@ -166,7 +178,8 @@ void A3Engine::_createGroundBuffers() {
     glEnableVertexAttribArray(_lightingShaderAttributeLocations.vPos);
     glVertexAttribPointer(_lightingShaderAttributeLocations.vPos, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
 
-
+    glEnableVertexAttribArray(_lightingShaderAttributeLocations.vecNormal);
+    glVertexAttribPointer(_lightingShaderAttributeLocations.vecNormal, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(GLfloat)));
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbods[1]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
@@ -309,6 +322,13 @@ void A3Engine::_setupScene() {
     _cameraSpeed = glm::vec2(0.25f, 0.02f);
 
 
+    glm::vec3 lightDirection = glm::vec3(-1,-1,-1);
+    glm::vec3 lightColor = glm::vec3(1,1,1);
+
+    glProgramUniform3fv(_lightingShaderProgram->getShaderProgramHandle(), _lightingShaderUniformLocations.lightDirection,1,&lightDirection[0]);
+
+    glProgramUniform3fv(_lightingShaderProgram->getShaderProgramHandle(), _lightingShaderUniformLocations.lightColor,1,&lightColor[0]);
+
 }
 
 void A3Engine::_changeToFreeCam() {
@@ -367,12 +387,26 @@ void A3Engine::_renderScene(glm::mat4 viewMtx, glm::mat4 projMtx) const {
     glm::mat4 groundModelMtx = glm::scale( glm::mat4(1.0f), glm::vec3(WORLD_SIZE, 1.0f, WORLD_SIZE));
     _computeAndSendMatrixUniforms(groundModelMtx, viewMtx, projMtx);
 
-    glm::vec3 groundColor(0.0f, 0.2f, 0.3f);
+    glm::vec3 groundColor(0.52f, 0.77f, 0.91f);
     glUniform3fv(_lightingShaderUniformLocations.materialColor, 1, &groundColor[0]);
 
     glBindVertexArray(_groundVAO);
     glDrawElements(GL_TRIANGLE_STRIP, _numGroundPoints, GL_UNSIGNED_SHORT, (void*)0);
     //// END DRAWING THE GROUND PLANE ////
+
+    //DRAWING THE PLANE
+    glm::mat4 modelMtx(1.0f);
+    // we are going to cheat and use our look at point to place our plane so that it is always in view
+    modelMtx = glm::translate( modelMtx, _plane->_planeLocation );
+    // rotate the plane with our camera theta direction (we need to rotate the opposite direction so that we always look at the back)
+    float pie2 = M_PI / 2.0f;
+
+    modelMtx = glm::rotate( modelMtx, -_plane->_direction - pie2, CSCI441::Y_AXIS );
+    // rotate the plane with our camera phi direction
+    modelMtx = glm::rotate( modelMtx,  pie2, CSCI441::X_AXIS );
+    // draw our plane now
+    _plane->drawPlane( modelMtx, viewMtx, projMtx );
+
 
     //// BEGIN DRAWING THE BUOYS ////
 
@@ -442,11 +476,21 @@ void A3Engine::_updateScene() {
     if( _keys[GLFW_KEY_D] ) {
         _rotateRight();
         _paddleForwardLeft();
+
+        _plane->_direction += _plane->speed / 5.0f;
+        if(_plane->_direction > M_PI * 2.0f){
+            _plane->_direction -= M_PI * 2.0f;
+        }
     }
     // turn left
     if( _keys[GLFW_KEY_A] ) {
         _rotateLeft();
         _paddleForwardRight();
+
+        _plane->_direction -= _plane->speed / 5.0f;
+        if(_plane->_direction < 0.0f){
+            _plane->_direction += M_PI * 2.0f;
+        }
     }
     // go forward
     if( _keys[GLFW_KEY_W] ) {
@@ -525,6 +569,10 @@ void A3Engine::_computeAndSendMatrixUniforms(glm::mat4 modelMtx, glm::mat4 viewM
     glm::mat4 mvpMtx = projMtx * viewMtx * modelMtx;
     // then send it to the shader on the GPU to apply to every vertex
     _lightingShaderProgram->setProgramUniform(_lightingShaderUniformLocations.mvpMatrix, mvpMtx);
+
+    glm::mat3 normalMtx = glm::mat3(glm::transpose(glm::inverse(modelMtx)));
+
+    _lightingShaderProgram->setProgramUniform(_lightingShaderUniformLocations.normMtx, normalMtx);
 
 
 }

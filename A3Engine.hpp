@@ -4,6 +4,7 @@
 #include <CSCI441/Camera.hpp>
 #include <CSCI441/OpenGLEngine.hpp>
 #include <CSCI441/ShaderProgram.hpp>
+#include "Plane.hpp"
 
 #include <vector>
 
@@ -66,6 +67,7 @@ private:
     /// \desc current state of the left mouse button
     GLint _leftMouseButtonState;
 
+    Plane* _plane;
     /// \desc the static fixed camera in our world
     CSCI441::Camera* _camera;
     /// \desc pair of values to store the speed the camera can move/rotate.
@@ -146,6 +148,11 @@ private:
         /// \desc material diffuse color location
         GLint materialColor;
         // TODO #1: add new uniforms
+        GLuint normMtx;
+
+        GLuint lightDirection;
+
+        GLuint lightColor;
 
     } _lightingShaderUniformLocations;
     /// \desc stores the locations of all of our shader attributes
@@ -153,6 +160,8 @@ private:
         /// \desc vertex position location
         GLint vPos;
         // TODO #2: add new attributes
+        GLuint vecNormal;
+
 
     } _lightingShaderAttributeLocations;
 
