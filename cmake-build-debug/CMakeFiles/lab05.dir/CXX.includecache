@@ -6,47 +6,57 @@
 
 #IncludeRegexTransform: 
 
-/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/A3Engine.cpp
+/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/A3Engine.cpp
 A3Engine.hpp
-/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/A3Engine.hpp
+/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/A3Engine.hpp
 ArcBallCam.h
-/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/ArcBallCam.h
-Raft.h
-/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/Raft.h
+/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/ArcBallCam.h
 CSCI441/objects.hpp
 -
 CSCI441/FreeCam.hpp
 -
 
-/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/A3Engine.hpp
+/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/A3Engine.hpp
 CSCI441/Camera.hpp
 -
 CSCI441/OpenGLEngine.hpp
 -
 CSCI441/ShaderProgram.hpp
 -
+Plane.hpp
+/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/Plane.hpp
 vector
 -
-Raft.h
-/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/Raft.h
 
-/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/ArcBallCam.h
+/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/ArcBallCam.cpp
+ArcBallCam.h
+/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/ArcBallCam.h
+cmath
+-
+
+/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/ArcBallCam.h
 CSCI441/Camera.hpp
 -
 
-/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/Raft.h
-CSCI441/OpenGLEngine.hpp
+/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/Plane.cpp
+Plane.hpp
+/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/Plane.hpp
+glm/gtc/matrix_transform.hpp
 -
+CSCI441/objects.hpp
+-
+CSCI441/OpenGLUtils.hpp
+-
+
+/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/Plane.hpp
 GL/glew.h
 -
 glm/glm.hpp
 -
-vector
--
 
-/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/main.cpp
+/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/main.cpp
 A3Engine.hpp
-/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/A3Engine.hpp
+/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/A3Engine.hpp
 stb_image.h
 -
 
@@ -143,14 +153,6 @@ stddef.h
 -
 
 /usr/local/include/GL/glew.h
-cstddef
--
-cstdint
--
-stddef.h
--
-stdint.h
--
 stddef.h
 -
 inttypes.h
@@ -790,6 +792,14 @@ scalar_constants.inl
 limits
 -
 
+/usr/local/include/glm/ext/scalar_int_sized.hpp
+../detail/setup.hpp
+/usr/local/include/glm/detail/setup.hpp
+
+/usr/local/include/glm/ext/scalar_uint_sized.hpp
+../detail/setup.hpp
+/usr/local/include/glm/detail/setup.hpp
+
 /usr/local/include/glm/ext/vector_bool2.hpp
 ../detail/type_vec2.hpp
 /usr/local/include/glm/detail/type_vec2.hpp
@@ -868,49 +878,61 @@ limits
 ../detail/type_vec2.hpp
 /usr/local/include/glm/detail/type_vec2.hpp
 
-/usr/local/include/glm/ext/vector_int2_precision.hpp
-../detail/type_vec2.hpp
-/usr/local/include/glm/detail/type_vec2.hpp
+/usr/local/include/glm/ext/vector_int2_sized.hpp
+../ext/vector_int2.hpp
+/usr/local/include/glm/ext/vector_int2.hpp
+../ext/scalar_int_sized.hpp
+/usr/local/include/glm/ext/scalar_int_sized.hpp
 
 /usr/local/include/glm/ext/vector_int3.hpp
 ../detail/type_vec3.hpp
 /usr/local/include/glm/detail/type_vec3.hpp
 
-/usr/local/include/glm/ext/vector_int3_precision.hpp
-../detail/type_vec3.hpp
-/usr/local/include/glm/detail/type_vec3.hpp
+/usr/local/include/glm/ext/vector_int3_sized.hpp
+../ext/vector_int3.hpp
+/usr/local/include/glm/ext/vector_int3.hpp
+../ext/scalar_int_sized.hpp
+/usr/local/include/glm/ext/scalar_int_sized.hpp
 
 /usr/local/include/glm/ext/vector_int4.hpp
 ../detail/type_vec4.hpp
 /usr/local/include/glm/detail/type_vec4.hpp
 
-/usr/local/include/glm/ext/vector_int4_precision.hpp
-../detail/type_vec4.hpp
-/usr/local/include/glm/detail/type_vec4.hpp
+/usr/local/include/glm/ext/vector_int4_sized.hpp
+../ext/vector_int4.hpp
+/usr/local/include/glm/ext/vector_int4.hpp
+../ext/scalar_int_sized.hpp
+/usr/local/include/glm/ext/scalar_int_sized.hpp
 
 /usr/local/include/glm/ext/vector_uint2.hpp
 ../detail/type_vec2.hpp
 /usr/local/include/glm/detail/type_vec2.hpp
 
-/usr/local/include/glm/ext/vector_uint2_precision.hpp
-../detail/type_vec2.hpp
-/usr/local/include/glm/detail/type_vec2.hpp
+/usr/local/include/glm/ext/vector_uint2_sized.hpp
+../ext/vector_uint2.hpp
+/usr/local/include/glm/ext/vector_uint2.hpp
+../ext/scalar_uint_sized.hpp
+/usr/local/include/glm/ext/scalar_uint_sized.hpp
 
 /usr/local/include/glm/ext/vector_uint3.hpp
 ../detail/type_vec3.hpp
 /usr/local/include/glm/detail/type_vec3.hpp
 
-/usr/local/include/glm/ext/vector_uint3_precision.hpp
-../detail/type_vec3.hpp
-/usr/local/include/glm/detail/type_vec3.hpp
+/usr/local/include/glm/ext/vector_uint3_sized.hpp
+../ext/vector_uint3.hpp
+/usr/local/include/glm/ext/vector_uint3.hpp
+../ext/scalar_uint_sized.hpp
+/usr/local/include/glm/ext/scalar_uint_sized.hpp
 
 /usr/local/include/glm/ext/vector_uint4.hpp
 ../detail/type_vec4.hpp
 /usr/local/include/glm/detail/type_vec4.hpp
 
-/usr/local/include/glm/ext/vector_uint4_precision.hpp
-../detail/type_vec4.hpp
-/usr/local/include/glm/detail/type_vec4.hpp
+/usr/local/include/glm/ext/vector_uint4_sized.hpp
+../ext/vector_uint4.hpp
+/usr/local/include/glm/ext/vector_uint4.hpp
+../ext/scalar_uint_sized.hpp
+/usr/local/include/glm/ext/scalar_uint_sized.hpp
 
 /usr/local/include/glm/fwd.hpp
 detail/qualifier.hpp
@@ -1223,12 +1245,12 @@ detail/func_trigonometric.inl
 /usr/local/include/glm/ext/vector_double2_precision.hpp
 ./ext/vector_int2.hpp
 /usr/local/include/glm/ext/vector_int2.hpp
-./ext/vector_int2_precision.hpp
-/usr/local/include/glm/ext/vector_int2_precision.hpp
+./ext/vector_int2_sized.hpp
+/usr/local/include/glm/ext/vector_int2_sized.hpp
 ./ext/vector_uint2.hpp
 /usr/local/include/glm/ext/vector_uint2.hpp
-./ext/vector_uint2_precision.hpp
-/usr/local/include/glm/ext/vector_uint2_precision.hpp
+./ext/vector_uint2_sized.hpp
+/usr/local/include/glm/ext/vector_uint2_sized.hpp
 
 /usr/local/include/glm/vec3.hpp
 ./ext/vector_bool3.hpp
@@ -1245,12 +1267,12 @@ detail/func_trigonometric.inl
 /usr/local/include/glm/ext/vector_double3_precision.hpp
 ./ext/vector_int3.hpp
 /usr/local/include/glm/ext/vector_int3.hpp
-./ext/vector_int3_precision.hpp
-/usr/local/include/glm/ext/vector_int3_precision.hpp
+./ext/vector_int3_sized.hpp
+/usr/local/include/glm/ext/vector_int3_sized.hpp
 ./ext/vector_uint3.hpp
 /usr/local/include/glm/ext/vector_uint3.hpp
-./ext/vector_uint3_precision.hpp
-/usr/local/include/glm/ext/vector_uint3_precision.hpp
+./ext/vector_uint3_sized.hpp
+/usr/local/include/glm/ext/vector_uint3_sized.hpp
 
 /usr/local/include/glm/vec4.hpp
 ./ext/vector_bool4.hpp
@@ -1267,12 +1289,12 @@ detail/func_trigonometric.inl
 /usr/local/include/glm/ext/vector_double4_precision.hpp
 ./ext/vector_int4.hpp
 /usr/local/include/glm/ext/vector_int4.hpp
-./ext/vector_int4_precision.hpp
-/usr/local/include/glm/ext/vector_int4_precision.hpp
+./ext/vector_int4_sized.hpp
+/usr/local/include/glm/ext/vector_int4_sized.hpp
 ./ext/vector_uint4.hpp
 /usr/local/include/glm/ext/vector_uint4.hpp
-./ext/vector_uint4_precision.hpp
-/usr/local/include/glm/ext/vector_uint4_precision.hpp
+./ext/vector_uint4_sized.hpp
+/usr/local/include/glm/ext/vector_uint4_sized.hpp
 
 /usr/local/include/glm/vector_relational.hpp
 detail/qualifier.hpp

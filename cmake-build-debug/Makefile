@@ -68,10 +68,10 @@ RM = /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP
+CMAKE_SOURCE_DIR = /Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/cmake-build-debug
+CMAKE_BINARY_DIR = /Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -100,9 +100,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/cmake-build-debug/CMakeFiles /Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/cmake-build-debug/CMakeFiles /Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/cmake-build-debug/CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -197,32 +197,32 @@ ArcBallCam.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab05.dir/build.make CMakeFiles/lab05.dir/ArcBallCam.cpp.s
 .PHONY : ArcBallCam.cpp.s
 
-Raft.o: Raft.cpp.o
+Plane.o: Plane.cpp.o
 
-.PHONY : Raft.o
+.PHONY : Plane.o
 
 # target to build an object file
-Raft.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab05.dir/build.make CMakeFiles/lab05.dir/Raft.cpp.o
-.PHONY : Raft.cpp.o
+Plane.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab05.dir/build.make CMakeFiles/lab05.dir/Plane.cpp.o
+.PHONY : Plane.cpp.o
 
-Raft.i: Raft.cpp.i
+Plane.i: Plane.cpp.i
 
-.PHONY : Raft.i
+.PHONY : Plane.i
 
 # target to preprocess a source file
-Raft.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab05.dir/build.make CMakeFiles/lab05.dir/Raft.cpp.i
-.PHONY : Raft.cpp.i
+Plane.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab05.dir/build.make CMakeFiles/lab05.dir/Plane.cpp.i
+.PHONY : Plane.cpp.i
 
-Raft.s: Raft.cpp.s
+Plane.s: Plane.cpp.s
 
-.PHONY : Raft.s
+.PHONY : Plane.s
 
 # target to generate assembly for a file
-Raft.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab05.dir/build.make CMakeFiles/lab05.dir/Raft.cpp.s
-.PHONY : Raft.cpp.s
+Plane.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab05.dir/build.make CMakeFiles/lab05.dir/Plane.cpp.s
+.PHONY : Plane.cpp.s
 
 main.o: main.cpp.o
 
@@ -266,9 +266,9 @@ help:
 	@echo "... ArcBallCam.o"
 	@echo "... ArcBallCam.i"
 	@echo "... ArcBallCam.s"
-	@echo "... Raft.o"
-	@echo "... Raft.i"
-	@echo "... Raft.s"
+	@echo "... Plane.o"
+	@echo "... Plane.i"
+	@echo "... Plane.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
