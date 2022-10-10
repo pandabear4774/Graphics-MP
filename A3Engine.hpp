@@ -7,7 +7,7 @@
 #include "Plane.hpp"
 
 #include <vector>
-#include "Raft.h"
+#include "Raft.hpp"
 
 class A3Engine : public CSCI441::OpenGLEngine {
 public:

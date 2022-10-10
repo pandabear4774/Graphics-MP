@@ -2,7 +2,7 @@
 // Created by Ben Schreiber on 10/9/22.
 //
 
-#include "Raft.h"
+#include "Raft.hpp"
 
 
 #include <GL/glew.h>
@@ -12,14 +12,9 @@
 
 
 #include <glm/glm.hpp>
-#include <CSCI441/Camera.hpp>
-#include <CSCI441/OpenGLEngine.hpp>
-#include <CSCI441/objects.hpp>
-#include <CSCI441/FreeCam.hpp>
-#include <CSCI441/ShaderProgram.hpp>
-#include <vector>
 
-Raft::Raft(GLuint shaderProgramHandle, GLint mvpMtxUniformLocation, GLint materialColorUniformLocation ){
+
+Raft::Raft(GLuint shaderProgramHandle, GLint mvpMtxUniformLocation, GLint normMtx, GLint materialColorUniformLocation ){
     _angle = 0.0;
     _positionX = 0;
     _positionZ = 10;

@@ -2,8 +2,8 @@
 // Created by Ben Schreiber on 10/9/22.
 //
 
-#ifndef LAB05_RAFT_H
-#define LAB05_RAFT_H
+#ifndef LAB05_RAFT_HPP
+#define LAB05_RAFT_HPP
 #include <CSCI441/OpenGLEngine.hpp>
 #include <GL/glew.h>
 #include <glm/glm.hpp>
@@ -11,7 +11,7 @@
 
 class Raft {
 public:
-    Raft(GLuint shaderProgramHandle, GLint mvpMtxUniformLocation, GLint materialColorUniformLocation );
+    Raft(GLuint shaderProgramHandle, GLint mvpMtxUniformLocation, GLint normMtx, GLint materialColorUniformLocation );
 
     void _drawRaft(glm::mat4 viewMtx, glm::mat4 projMtx);
 
@@ -92,4 +92,4 @@ private:
 };
 
 
-#endif //LAB05_RAFT_H
+#endif //LAB05_RAFT_HPP

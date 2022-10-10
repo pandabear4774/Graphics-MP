@@ -4,10 +4,11 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/A3Engine.cpp" "/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/cmake-build-debug/CMakeFiles/lab05.dir/A3Engine.cpp.o"
-  "/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/ArcBallCam.cpp" "/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/cmake-build-debug/CMakeFiles/lab05.dir/ArcBallCam.cpp.o"
-  "/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/Plane.cpp" "/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/cmake-build-debug/CMakeFiles/lab05.dir/Plane.cpp.o"
-  "/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/main.cpp" "/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/cmake-build-debug/CMakeFiles/lab05.dir/main.cpp.o"
+  "/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/A3Engine.cpp" "/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/cmake-build-debug/CMakeFiles/lab05.dir/A3Engine.cpp.o"
+  "/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/ArcBallCam.cpp" "/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/cmake-build-debug/CMakeFiles/lab05.dir/ArcBallCam.cpp.o"
+  "/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/Plane.cpp" "/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/cmake-build-debug/CMakeFiles/lab05.dir/Plane.cpp.o"
+  "/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/Raft.cpp" "/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/cmake-build-debug/CMakeFiles/lab05.dir/Raft.cpp.o"
+  "/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/main.cpp" "/Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/cmake-build-debug/CMakeFiles/lab05.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "AppleClang")
 
