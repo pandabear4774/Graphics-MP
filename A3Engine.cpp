@@ -469,16 +469,26 @@ void A3Engine::_updateScene() {
 
     if( _keys[GLFW_KEY_1]){
         _currVehicle = _raft;
-        _camera->recomputeOrientation();
 
+
+        if(cameraType == 3){
+            _camera->setTheta(_currVehicle->_direction);
+            _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
+        }
+        _camera->recomputeOrientation();
     }
 
     if( _keys[GLFW_KEY_2]){
         _currVehicle = _plane;
         _currVehicle->_location = _plane->_location;
         _currVehicle->_direction = _plane->_direction;
-        _camera->recomputeOrientation();
 
+        if(cameraType == 3){
+            _camera->setTheta(_currVehicle->_direction - M_PI/2);
+            _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
+        }
+        
+        _camera->recomputeOrientation();
     }
     if( _keys[GLFW_KEY_3]){
         // _currVehicle = last vehicle;
@@ -501,6 +511,17 @@ void A3Engine::_updateScene() {
     if(_keys[GLFW_KEY_6]){
         cameraType = 3;
         _changeToFFPCam();
+
+        if(_currVehicle == _raft) {
+            _camera->setTheta(_currVehicle->_direction);
+            _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
+        }
+
+        if(_currVehicle == _plane) {
+            _camera->setTheta(_currVehicle->_direction - M_PI/2);
+            _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
+        }
+
         _camera->recomputeOrientation();
     }
 }
