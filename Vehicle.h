@@ -12,6 +12,8 @@
 class Vehicle {
 public:
     glm::vec3 _location;
+
+    float _direction;
 };
 
 

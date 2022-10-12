@@ -1,14 +1,10 @@
 //
-// Created by Ben Schreiber on 10/8/22.
+// Created by Kurtis Quant on 10/12/22.
 //
 
-#include "ArcBallCam.h"
+#include "FFPCam.hpp"
 
-
-#include <cmath>
-
-
-void ArcBallCam::recomputeOrientation() {
+void FFPCam::recomputeOrientation() {
 
     // update camera position based on the radius, theta and phi, and the look at point
 
@@ -29,17 +25,14 @@ void ArcBallCam::recomputeOrientation() {
 
 
 
-void ArcBallCam::moveForward(GLfloat movementFactor) {
+void FFPCam::moveForward(GLfloat movementFactor) {
     // decrease the radius and recompute orientation and view matrix
     _radius -= movementFactor;
     recomputeOrientation();
 }
 
-void ArcBallCam::moveBackward(GLfloat movementFactor) {
+void FFPCam::moveBackward(GLfloat movementFactor) {
     // increase the radius and recompute orientation and view matrix
     _radius += movementFactor;
     recomputeOrientation();
-    }
-
-
-
+}

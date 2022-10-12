@@ -1,4 +1,4 @@
-/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP
 -- Configuring done
 -- Generating done
--- Build files have been written to: /Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/cmake-build-debug
+-- Build files have been written to: /Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/cmake-build-debug

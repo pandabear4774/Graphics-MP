@@ -75,10 +75,18 @@ void A3Engine::handleCursorPositionEvent(glm::vec2 currMousePosition) {
     if(_leftMouseButtonState == GLFW_PRESS) {
         // rotate the camera by the distance the mouse moved
 
-        _camera->rotate((currMousePosition.x - _mousePosition.x) * 0.005f,
-                        (_mousePosition.y - currMousePosition.y) * 0.005f );
+        if(cameraType == 1 || cameraType == 2) {
+            _camera->rotate((currMousePosition.x - _mousePosition.x) * 0.005f,
+                            (_mousePosition.y - currMousePosition.y) * 0.005f );
 
-        _camera->recomputeOrientation();
+            _camera->recomputeOrientation();
+        } else if(cameraType == 3){
+            _camera->rotate((currMousePosition.x - _mousePosition.x) * 0.005f,
+                            (_mousePosition.y - currMousePosition.y) * 0.005f );
+
+            _camera->recomputeOrientation();
+        }
+
 
 
     }
@@ -241,12 +249,22 @@ void A3Engine::_setupScene() {
     glProgramUniform3fv(_lightingShaderProgram->getShaderProgramHandle(), _lightingShaderUniformLocations.lightColor,1,&lightColor[0]);
 
 }
+void A3Engine::_changeToFFPCam() {
+    _camera = new FFPCam();
 
+    _camera->setPosition(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y +1, _currVehicle->_location.z));
+
+    // set initial radius and angles
+    _camera->setPhi(2);
+    _camera->setTheta(_currVehicle->_direction);
+    _camera->recomputeOrientation();
+
+}
 void A3Engine::_changeToFreeCam() {
     _camera = new CSCI441::FreeCam();
     _camera->setPosition( glm::vec3(1.5*WORLD_SIZE, 40.0f, WORLD_SIZE) );
     _camera->setTheta( -M_PI / 3.0f );
-    _camera->setPhi( M_PI / 2.8f );
+    _camera->setPhi( _currVehicle->_direction );
     _camera->recomputeOrientation();
 }
 
@@ -256,7 +274,7 @@ void A3Engine::_changeToArcBallCam() {
     _camera = new ArcBallCam();
 
     // set the lookout point to be at the raft
-    _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,0.0 , _raft->_location.z));
+    _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y , _currVehicle->_location.z));
 
     // set initial radius and angles
     _camera->setRadius(30);
@@ -351,13 +369,29 @@ void A3Engine::_updateScene() {
         if (_currVehicle == _raft) {
             _raft->_rotateRight();
             _raft->_paddleForwardLeft();
+
+            _currVehicle->_direction = -_raft->_angle;
+
+            if(cameraType == 3){
+                _camera->setTheta(_currVehicle->_direction);
+                _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
+                _camera->recomputeOrientation();
+            }
         }
 
 
         if (_currVehicle == _plane) {
+
+
+            _currVehicle->_direction += _plane->speed / 5.0f;
             _plane->_direction += _plane->speed / 5.0f;
             if (_plane->_direction > M_PI * 2.0f) {
                 _plane->_direction -= M_PI * 2.0f;
+            }
+            if(cameraType == 3){
+                _camera->setTheta(_currVehicle->_direction - M_PI/2);
+                _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
+                _camera->recomputeOrientation();
             }
         }
     }
@@ -366,12 +400,27 @@ void A3Engine::_updateScene() {
         if(_currVehicle == _raft) {
             _raft->_rotateLeft();
             _raft->_paddleForwardRight();
+
+            _currVehicle->_direction = -_raft->_angle;
+
+            if(cameraType == 3){
+                _camera->setTheta(_currVehicle->_direction);
+                _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
+                _camera->recomputeOrientation();
+            }
         }
 
         if(_currVehicle == _plane) {
+
+            _currVehicle->_direction -= _plane->speed / 5.0f;
             _plane->_direction -= _plane->speed / 5.0f;
             if (_plane->_direction < 0.0f) {
                 _plane->_direction += M_PI * 2.0f;
+            }
+            if(cameraType == 3){
+                _camera->setTheta(_currVehicle->_direction - M_PI/2);
+                _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
+                _camera->recomputeOrientation();
             }
         }
     }
@@ -388,8 +437,13 @@ void A3Engine::_updateScene() {
         }
 
         // update lookatPoint and recompute orientation
-        _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,0.0 , _currVehicle->_location.z));
-        _camera->recomputeOrientation();
+        if(cameraType == 1){
+            _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y , _currVehicle->_location.z));
+            _camera->recomputeOrientation();
+        } else if(cameraType == 3){
+            _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
+            _camera->recomputeOrientation();
+        }
     }
     // go backward
     if( _keys[GLFW_KEY_S] ) {
@@ -402,36 +456,52 @@ void A3Engine::_updateScene() {
             _plane->flyForward();
         }
 
-
+        if(cameraType == 1){
+            _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y , _currVehicle->_location.z));
+            _camera->recomputeOrientation();
+        } else if(cameraType == 3){
+            _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5, _currVehicle->_location.z));
+            _camera->recomputeOrientation();
+        }
         // update lookout point and recomputer orientation
-        _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,0.0 , _currVehicle->_location.z));
-        _camera->recomputeOrientation();
+
     }
 
     if( _keys[GLFW_KEY_1]){
         _currVehicle = _raft;
+        _camera->recomputeOrientation();
 
     }
 
     if( _keys[GLFW_KEY_2]){
         _currVehicle = _plane;
+        _currVehicle->_location = _plane->_location;
+        _currVehicle->_direction = _plane->_direction;
+        _camera->recomputeOrientation();
 
     }
     if( _keys[GLFW_KEY_3]){
         // _currVehicle = last vehicle;
+        _camera->recomputeOrientation();
 
     }
 
     if(_keys[GLFW_KEY_4]){
+        cameraType = 1;
         _changeToArcBallCam();
+        _camera->recomputeOrientation();
     }
 
     if(_keys[GLFW_KEY_5]){
+        cameraType = 2;
         _changeToFreeCam();
+        _camera->recomputeOrientation();
     }
 
     if(_keys[GLFW_KEY_6]){
-        // add POV cam
+        cameraType = 3;
+        _changeToFFPCam();
+        _camera->recomputeOrientation();
     }
 }
 
@@ -459,6 +529,7 @@ void A3Engine::run() {
 
         // set up our look at matrix to position our camera
         glm::mat4 viewMatrix = _camera->getViewMatrix();
+
 
         // draw everything to the window
         _renderScene(viewMatrix, projectionMatrix);

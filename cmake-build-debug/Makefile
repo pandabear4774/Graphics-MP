@@ -68,10 +68,10 @@ RM = /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP
+CMAKE_SOURCE_DIR = /Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/cmake-build-debug
+CMAKE_BINARY_DIR = /Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -100,9 +100,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/cmake-build-debug/CMakeFiles /Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/cmake-build-debug/CMakeFiles /Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/cmake-build-debug/CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/benschreiber/CLionProjects/ComputerGraphics/Graphics-MP/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -196,6 +196,33 @@ ArcBallCam.s: ArcBallCam.cpp.s
 ArcBallCam.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab05.dir/build.make CMakeFiles/lab05.dir/ArcBallCam.cpp.s
 .PHONY : ArcBallCam.cpp.s
+
+FFPCam.o: FFPCam.cpp.o
+
+.PHONY : FFPCam.o
+
+# target to build an object file
+FFPCam.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab05.dir/build.make CMakeFiles/lab05.dir/FFPCam.cpp.o
+.PHONY : FFPCam.cpp.o
+
+FFPCam.i: FFPCam.cpp.i
+
+.PHONY : FFPCam.i
+
+# target to preprocess a source file
+FFPCam.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab05.dir/build.make CMakeFiles/lab05.dir/FFPCam.cpp.i
+.PHONY : FFPCam.cpp.i
+
+FFPCam.s: FFPCam.cpp.s
+
+.PHONY : FFPCam.s
+
+# target to generate assembly for a file
+FFPCam.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab05.dir/build.make CMakeFiles/lab05.dir/FFPCam.cpp.s
+.PHONY : FFPCam.cpp.s
 
 Plane.o: Plane.cpp.o
 
@@ -320,6 +347,9 @@ help:
 	@echo "... ArcBallCam.o"
 	@echo "... ArcBallCam.i"
 	@echo "... ArcBallCam.s"
+	@echo "... FFPCam.o"
+	@echo "... FFPCam.i"
+	@echo "... FFPCam.s"
 	@echo "... Plane.o"
 	@echo "... Plane.i"
 	@echo "... Plane.s"

@@ -5,6 +5,7 @@
 #include <CSCI441/OpenGLEngine.hpp>
 #include <CSCI441/ShaderProgram.hpp>
 #include "Plane.hpp"
+#include "FFPCam.hpp"
 
 #include <vector>
 #include "Raft.hpp"
@@ -52,6 +53,7 @@ private:
 
     void _changeToFreeCam();
     void _changeToArcBallCam();
+    void _changeToFFPCam();
 
     /// \desc tracks the number of different keys that can be present as determined by GLFW
     static constexpr GLuint NUM_KEYS = GLFW_KEY_LAST;
@@ -65,6 +67,8 @@ private:
     GLint _leftMouseButtonState;
 
     Vehicle* _currVehicle;
+
+    int cameraType = 1;
 
     Plane* _plane;
     /// \desc the static fixed camera in our world

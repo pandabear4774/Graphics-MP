@@ -1,6 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/lab05.dir/A3Engine.cpp.o"
   "CMakeFiles/lab05.dir/ArcBallCam.cpp.o"
+  "CMakeFiles/lab05.dir/FFPCam.cpp.o"
   "CMakeFiles/lab05.dir/Plane.cpp.o"
   "CMakeFiles/lab05.dir/Raft.cpp.o"
   "CMakeFiles/lab05.dir/Vehicle.cpp.o"
