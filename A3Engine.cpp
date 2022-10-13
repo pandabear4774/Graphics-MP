@@ -147,11 +147,89 @@ void A3Engine::_setupBuffers() {
 
     _currVehicle = _raft;
 
+    _createPyramidBuffers();
     _createGroundBuffers();
+    _createBuildingBuffers();
     _generateEnvironment();
 
 }
 
+void A3Engine::_createPyramidBuffers(){
+    struct Vertex {
+        GLfloat x, y, z;
+        GLfloat normalX, normalY, normalZ;
+
+    };
+
+    Vertex groundQuad[5] = {
+            {-1.0f, 0.0f, -1.0f,-1.0,0.0,-1.0},
+            { 1.0f, 0.0f, -1.0f,1.0,0.0,-1.0},
+            {-1.0f, 0.0f,  1.0f,-1.0,0.0,1.0},
+            { 1.0f, 0.0f,  1.0f,1.0,0.0,1.0},
+            {0.0f, 1.0f, 0.0f,0.0,1.0,0.0},
+    };
+
+    GLushort indices[12] = {4,0,2, 4,2,3, 4,0,1, 4,1,3};
+
+    _numGroundPoints = 12;
+
+    glGenVertexArrays(1, &_pyramidVAO);
+    glBindVertexArray(_pyramidVAO);
+
+    GLuint vbods[2];       // 0 - VBO, 1 - IBO
+    glGenBuffers(2, vbods);
+    glBindBuffer(GL_ARRAY_BUFFER, vbods[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(groundQuad), groundQuad, GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(_lightingShaderAttributeLocations.vPos);
+    glVertexAttribPointer(_lightingShaderAttributeLocations.vPos, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+
+    glEnableVertexAttribArray(_lightingShaderAttributeLocations.vecNormal);
+    glVertexAttribPointer(_lightingShaderAttributeLocations.vecNormal, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(GLfloat)));
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbods[1]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+}
+
+void A3Engine::_createBuildingBuffers(){
+    struct Vertex {
+        GLfloat x, y, z;
+        GLfloat normalX, normalY, normalZ;
+
+    };
+
+    Vertex groundQuad[8] = {
+            {-1.0f, 0.0f, -1.0f,-1.0,0.0,-1.0},
+            { 1.0f, 0.0f, -1.0f,1.0,0.0,-1.0},
+            {-1.0f, 0.0f,  1.0f,-1.0,0.0,1.0},
+            { 1.0f, 0.0f,  1.0f,1.0,0.0,1.0},
+            {-1.0f, 1.0f, -1.0f,-1.0,1.0,-1.0},
+            { 1.0f, 1.0f, -1.0f,1.0,1.0,-1.0},
+            {-1.0f, 1.0f,  1.0f,-1.0,1.0,1.0},
+            { 1.0f, 1.0f,  1.0f,1.0,1.0,1.0}
+    };
+
+    GLushort indices[30] = {4,5,6,5,6,7, 1,4,5,4,1,0, 2,3,7,2,6,7, 1,3,7,1,5,7, 0,2,4,2,4,6};
+
+    _numGroundPoints = 30;
+
+    glGenVertexArrays(1, &_buildingVAO);
+    glBindVertexArray(_buildingVAO);
+
+    GLuint vbods[2];       // 0 - VBO, 1 - IBO
+    glGenBuffers(2, vbods);
+    glBindBuffer(GL_ARRAY_BUFFER, vbods[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(groundQuad), groundQuad, GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(_lightingShaderAttributeLocations.vPos);
+    glVertexAttribPointer(_lightingShaderAttributeLocations.vPos, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+
+    glEnableVertexAttribArray(_lightingShaderAttributeLocations.vecNormal);
+    glVertexAttribPointer(_lightingShaderAttributeLocations.vecNormal, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(GLfloat)));
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbods[1]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+}
 void A3Engine::_createGroundBuffers() {
     struct Vertex {
         GLfloat x, y, z;
@@ -216,9 +294,9 @@ void A3Engine::_generateEnvironment() {
                 glm::mat4 transToSpotMtx = glm::translate( glm::mat4(1.0), glm::vec3(i, 0.0f, j) );
 
                 // compute random radius
-                GLdouble radius = powf(getRand(), 2)*3 + 1;
+                GLdouble radius = powf(getRand(), 2)*5 + 1;
                 // scale to buoy size
-                glm::mat4 scaleToHeightMtx = glm::scale( glm::mat4(1.0), glm::vec3(radius, radius, radius) );
+                glm::mat4 scaleToHeightMtx = glm::scale( glm::mat4(1.0), glm::vec3(radius/2, radius, radius/2) );
 
                 // translate up to grid
 
@@ -228,8 +306,8 @@ void A3Engine::_generateEnvironment() {
                 // compute random color
                 glm::vec3 color( getRand(), getRand(), getRand() );
                 // store buoy properties
-                BuoyData currentBuoy = {modelMatrix, color};
-                _buoys.emplace_back( currentBuoy );
+                PyramidData currentPyramid = {modelMatrix, color};
+                _pyramids.emplace_back( currentPyramid );
             }
 
             if( i % 2 && j % 2 && getRand() > 0.025f && getRand() < 0.05 ) {
@@ -242,10 +320,10 @@ void A3Engine::_generateEnvironment() {
                 glm::mat4 scaleToHeightMtx = glm::scale( glm::mat4(1.0), glm::vec3(1, height, 1) );
 
                 // translate up to grid
-                glm::mat4 transToHeight = glm::translate( glm::mat4(1.0), glm::vec3(0, height/2.0f, 0) );
+                //glm::mat4 transToHeight = glm::translate( glm::mat4(1.0), glm::vec3(0, 0.2, 0) );
 
                 // compute full model matrix
-                glm::mat4 modelMatrix = transToHeight * scaleToHeightMtx * transToSpotMtx;
+                glm::mat4 modelMatrix =  scaleToHeightMtx * transToSpotMtx;
 
                 // compute random color
                 glm::vec3 color( getRand(), getRand(), getRand() );
@@ -320,6 +398,8 @@ void A3Engine::_cleanupBuffers() {
     CSCI441::deleteObjectVAOs();
     glDeleteVertexArrays( 1, &_groundVAO );
 
+    glDeleteVertexArrays( 1, &_buildingVAO );
+
     fprintf( stdout, "[INFO]: ...deleting VBOs....\n" );
     CSCI441::deleteObjectVBOs();
 
@@ -362,21 +442,35 @@ void A3Engine::_renderScene(glm::mat4 viewMtx, glm::mat4 projMtx) const {
 
     //// BEGIN DRAWING THE BUOYS ////
 
-    for( const BuoyData& currentBuoy : _buoys ) {
-        _computeAndSendMatrixUniforms(currentBuoy.modelMatrix, viewMtx, projMtx);
+    for( const PyramidData& currentPyramid : _pyramids ) {
+        /// VAO STUFF
+        glm::mat4 groundModelMtx = currentPyramid.modelMatrix;
+        _computeAndSendMatrixUniforms(groundModelMtx, viewMtx, projMtx);
 
-        glUniform3fv(_lightingShaderUniformLocations.materialColor, 1, &currentBuoy.color[0]);
+        glm::vec3 groundColor(rand(), rand(), rand());
+        glUniform3fv(_lightingShaderUniformLocations.materialColor, 1, &currentPyramid.color[0]);
 
-        CSCI441::drawSolidSphere(1.0, 100,100);
+        glBindVertexArray(_pyramidVAO);
+        glDrawElements(GL_TRIANGLES, _numGroundPoints, GL_UNSIGNED_SHORT, (void*)0);
 
     }
 
     for( const BuildingData& currentBuilding : _buildings ) {
-        _computeAndSendMatrixUniforms(currentBuilding.modelMatrix, viewMtx, projMtx);
+        //_computeAndSendMatrixUniforms(currentBuilding.modelMatrix, viewMtx, projMtx);
 
+        //glUniform3fv(_lightingShaderUniformLocations.materialColor, 1, &currentBuilding.color[0]);
+
+        //CSCI441::drawSolidCube(1.0);
+
+        /// VAO STUFF
+        glm::mat4 groundModelMtx = currentBuilding.modelMatrix;
+        _computeAndSendMatrixUniforms(groundModelMtx, viewMtx, projMtx);
+
+        glm::vec3 groundColor(rand(), rand(), rand());
         glUniform3fv(_lightingShaderUniformLocations.materialColor, 1, &currentBuilding.color[0]);
 
-        CSCI441::drawSolidCube(1.0);
+        glBindVertexArray(_buildingVAO);
+        glDrawElements(GL_TRIANGLES, _numGroundPoints, GL_UNSIGNED_SHORT, (void*)0);
     }
     //// END DRAWING THE BUOYS ////
 

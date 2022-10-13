@@ -90,10 +90,16 @@ private:
     /// \desc the number of points that make up our ground object
     GLsizei _numGroundPoints;
 
+    GLuint _buildingVAO;
+
+    GLuint _pyramidVAO;
+
     /// \desc creates the ground VAO
     void _createGroundBuffers();
+    void _createBuildingBuffers();
+    void _createPyramidBuffers();
 
-    struct BuoyData {
+    struct PyramidData {
         glm::mat4 modelMatrix;
         glm::vec3 color;
     };
@@ -104,7 +110,7 @@ private:
     };
 
 
-    std::vector<BuoyData> _buoys;
+    std::vector<PyramidData> _pyramids;
 
     std::vector<BuildingData> _buildings;
 
