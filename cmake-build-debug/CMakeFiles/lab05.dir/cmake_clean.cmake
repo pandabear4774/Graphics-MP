@@ -3,6 +3,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/lab05.dir/A3Engine.cpp.obj.d"
   "CMakeFiles/lab05.dir/ArcBallCam.cpp.obj"
   "CMakeFiles/lab05.dir/ArcBallCam.cpp.obj.d"
+  "CMakeFiles/lab05.dir/Car.cpp.obj"
+  "CMakeFiles/lab05.dir/Car.cpp.obj.d"
   "CMakeFiles/lab05.dir/FFPCam.cpp.obj"
   "CMakeFiles/lab05.dir/FFPCam.cpp.obj.d"
   "CMakeFiles/lab05.dir/Plane.cpp.obj"

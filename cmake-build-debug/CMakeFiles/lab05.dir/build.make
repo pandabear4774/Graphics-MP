@@ -143,11 +143,26 @@ CMakeFiles/lab05.dir/Raft.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/lab05.dir/Raft.cpp.s"
 	C:\PROGRA~1\JETBRA~1\CLION2~1.3\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S Z:\CSCI441\Graphics-MP\Raft.cpp -o CMakeFiles\lab05.dir\Raft.cpp.s
 
+CMakeFiles/lab05.dir/Car.cpp.obj: CMakeFiles/lab05.dir/flags.make
+CMakeFiles/lab05.dir/Car.cpp.obj: CMakeFiles/lab05.dir/includes_CXX.rsp
+CMakeFiles/lab05.dir/Car.cpp.obj: ../Car.cpp
+CMakeFiles/lab05.dir/Car.cpp.obj: CMakeFiles/lab05.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\CSCI441\Graphics-MP\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/lab05.dir/Car.cpp.obj"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.3\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/lab05.dir/Car.cpp.obj -MF CMakeFiles\lab05.dir\Car.cpp.obj.d -o CMakeFiles\lab05.dir\Car.cpp.obj -c Z:\CSCI441\Graphics-MP\Car.cpp
+
+CMakeFiles/lab05.dir/Car.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/lab05.dir/Car.cpp.i"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.3\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E Z:\CSCI441\Graphics-MP\Car.cpp > CMakeFiles\lab05.dir\Car.cpp.i
+
+CMakeFiles/lab05.dir/Car.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/lab05.dir/Car.cpp.s"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.3\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S Z:\CSCI441\Graphics-MP\Car.cpp -o CMakeFiles\lab05.dir\Car.cpp.s
+
 CMakeFiles/lab05.dir/Vehicle.cpp.obj: CMakeFiles/lab05.dir/flags.make
 CMakeFiles/lab05.dir/Vehicle.cpp.obj: CMakeFiles/lab05.dir/includes_CXX.rsp
 CMakeFiles/lab05.dir/Vehicle.cpp.obj: ../Vehicle.cpp
 CMakeFiles/lab05.dir/Vehicle.cpp.obj: CMakeFiles/lab05.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\CSCI441\Graphics-MP\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/lab05.dir/Vehicle.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\CSCI441\Graphics-MP\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/lab05.dir/Vehicle.cpp.obj"
 	C:\PROGRA~1\JETBRA~1\CLION2~1.3\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/lab05.dir/Vehicle.cpp.obj -MF CMakeFiles\lab05.dir\Vehicle.cpp.obj.d -o CMakeFiles\lab05.dir\Vehicle.cpp.obj -c Z:\CSCI441\Graphics-MP\Vehicle.cpp
 
 CMakeFiles/lab05.dir/Vehicle.cpp.i: cmake_force
@@ -162,7 +177,7 @@ CMakeFiles/lab05.dir/FFPCam.cpp.obj: CMakeFiles/lab05.dir/flags.make
 CMakeFiles/lab05.dir/FFPCam.cpp.obj: CMakeFiles/lab05.dir/includes_CXX.rsp
 CMakeFiles/lab05.dir/FFPCam.cpp.obj: ../FFPCam.cpp
 CMakeFiles/lab05.dir/FFPCam.cpp.obj: CMakeFiles/lab05.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\CSCI441\Graphics-MP\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/lab05.dir/FFPCam.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=Z:\CSCI441\Graphics-MP\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/lab05.dir/FFPCam.cpp.obj"
 	C:\PROGRA~1\JETBRA~1\CLION2~1.3\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/lab05.dir/FFPCam.cpp.obj -MF CMakeFiles\lab05.dir\FFPCam.cpp.obj.d -o CMakeFiles\lab05.dir\FFPCam.cpp.obj -c Z:\CSCI441\Graphics-MP\FFPCam.cpp
 
 CMakeFiles/lab05.dir/FFPCam.cpp.i: cmake_force
@@ -180,6 +195,7 @@ lab05_OBJECTS = \
 "CMakeFiles/lab05.dir/ArcBallCam.cpp.obj" \
 "CMakeFiles/lab05.dir/Plane.cpp.obj" \
 "CMakeFiles/lab05.dir/Raft.cpp.obj" \
+"CMakeFiles/lab05.dir/Car.cpp.obj" \
 "CMakeFiles/lab05.dir/Vehicle.cpp.obj" \
 "CMakeFiles/lab05.dir/FFPCam.cpp.obj"
 
@@ -191,13 +207,14 @@ lab05.exe: CMakeFiles/lab05.dir/A3Engine.cpp.obj
 lab05.exe: CMakeFiles/lab05.dir/ArcBallCam.cpp.obj
 lab05.exe: CMakeFiles/lab05.dir/Plane.cpp.obj
 lab05.exe: CMakeFiles/lab05.dir/Raft.cpp.obj
+lab05.exe: CMakeFiles/lab05.dir/Car.cpp.obj
 lab05.exe: CMakeFiles/lab05.dir/Vehicle.cpp.obj
 lab05.exe: CMakeFiles/lab05.dir/FFPCam.cpp.obj
 lab05.exe: CMakeFiles/lab05.dir/build.make
 lab05.exe: CMakeFiles/lab05.dir/linklibs.rsp
 lab05.exe: CMakeFiles/lab05.dir/objects1.rsp
 lab05.exe: CMakeFiles/lab05.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=Z:\CSCI441\Graphics-MP\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable lab05.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=Z:\CSCI441\Graphics-MP\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX executable lab05.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\lab05.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

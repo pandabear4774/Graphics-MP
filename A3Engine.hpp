@@ -5,6 +5,7 @@
 #include <CSCI441/OpenGLEngine.hpp>
 #include <CSCI441/ShaderProgram.hpp>
 #include "Plane.hpp"
+#include "Car.hpp"
 #include "FFPCam.hpp"
 
 #include <vector>
@@ -80,7 +81,7 @@ private:
 
     Raft* _raft;
 
-
+    Car* _car;
 
     /// \desc the size of the world (controls the ground size and locations of buildings)
     static constexpr GLfloat WORLD_SIZE = 55.0f;

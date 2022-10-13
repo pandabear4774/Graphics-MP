@@ -140,6 +140,11 @@ void A3Engine::_setupBuffers() {
                        _lightingShaderUniformLocations.normMtx,
                        _lightingShaderUniformLocations.materialColor);
 
+    _car = new Car(_lightingShaderProgram->getShaderProgramHandle(),
+                       _lightingShaderUniformLocations.mvpMatrix,
+                       _lightingShaderUniformLocations.normMtx,
+                       _lightingShaderUniformLocations.materialColor);
+
     _currVehicle = _raft;
 
     _createGroundBuffers();
@@ -346,6 +351,8 @@ void A3Engine::_renderScene(glm::mat4 viewMtx, glm::mat4 projMtx) const {
     //// END DRAWING THE BUOYS ////
 
     _raft->_drawRaft(viewMtx, projMtx);
+
+    _car->_drawCar(glm::mat4(1.0f), viewMtx, projMtx);
 }
 
 void A3Engine::_updateScene() {
@@ -367,6 +374,17 @@ void A3Engine::_updateScene() {
             _raft->_paddleForwardLeft();
 
             _currVehicle->_direction = -_raft->_angle;
+
+            if(FFPToggle){
+                _cameraFFP->setTheta(_currVehicle->_direction);
+                _cameraFFP->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
+                _cameraFFP->recomputeOrientation();
+            }
+        }
+
+        if (_currVehicle == _car){
+            _car->_rotateRight();
+            _currVehicle->_direction = -_car->_angle;
 
             if(FFPToggle){
                 _cameraFFP->setTheta(_currVehicle->_direction);
@@ -406,6 +424,17 @@ void A3Engine::_updateScene() {
             }
         }
 
+        if (_currVehicle == _car){
+            _car->_rotateLeft();
+            _currVehicle->_direction = -_car->_angle;
+
+            if(FFPToggle){
+                _cameraFFP->setTheta(_currVehicle->_direction);
+                _cameraFFP->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
+                _cameraFFP->recomputeOrientation();
+            }
+        }
+
         if(_currVehicle == _plane) {
 
             _currVehicle->_direction -= _plane->speed / 5.0f;
@@ -432,6 +461,10 @@ void A3Engine::_updateScene() {
             _plane->flyForward();
         }
 
+        if (_currVehicle == _car){
+            _car->_moveForward(WORLD_SIZE);
+        }
+
         // update lookatPoint and recompute orientation
         _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y , _currVehicle->_location.z));
         _camera->recomputeOrientation();
@@ -445,6 +478,10 @@ void A3Engine::_updateScene() {
         if(_currVehicle == _raft){
             _raft->_moveBackward(WORLD_SIZE);
             _raft->_paddleBackward();
+        }
+
+        if (_currVehicle == _car){
+            _car->_moveBackward(WORLD_SIZE);
         }
 
         if(_currVehicle == _plane){
@@ -487,7 +524,14 @@ void A3Engine::_updateScene() {
         _camera->recomputeOrientation();
     }
     if( _keys[GLFW_KEY_3]){
-        // _currVehicle = last vehicle;
+        _currVehicle = _car;
+
+
+        if(FFPToggle){
+            _cameraFFP->setTheta(_currVehicle->_direction);
+            _cameraFFP->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
+            _cameraFFP->recomputeOrientation();
+        }
         _camera->recomputeOrientation();
 
     }
@@ -505,7 +549,7 @@ void A3Engine::_updateScene() {
     if(_keys[GLFW_KEY_6]){
         _changeToFFPCam();
 
-        if(_currVehicle == _raft) {
+        if(_currVehicle == _raft || _currVehicle == _car) {
             _cameraFFP->setTheta(_currVehicle->_direction);
             _cameraFFP->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
         }

@@ -36,15 +36,15 @@ public:
 
     GLfloat _wheelAngle;
 
-    GLfloat _scaleBody;
+    glm::vec3 _scaleBody;
 
-    GLfloat _scaleBody2;
+    glm::vec3 _scaleBody2;
 
-    GLfloat _translateBody2;
+    glm::vec3 _translateBody2;
 
-    GLfloat _translateWheelLR;
+    glm::vec3 _translateWheelLR;
 
-    GLfloat _translateWheelUD;
+    glm::vec3 _translateWheelUD;
 
 private:
     GLuint _shaderProgramHandle;
@@ -75,6 +75,8 @@ private:
     void _drawWheels(glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx) const;
 
     void _drawBody(glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx) const;
+
+    void _drawBody2(glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx) const;
 
     void _computeAndSendMatrixUniforms(glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx) const;
 };

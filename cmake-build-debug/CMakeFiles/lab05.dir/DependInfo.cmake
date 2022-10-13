@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "Z:/CSCI441/Graphics-MP/A3Engine.cpp" "CMakeFiles/lab05.dir/A3Engine.cpp.obj" "gcc" "CMakeFiles/lab05.dir/A3Engine.cpp.obj.d"
   "Z:/CSCI441/Graphics-MP/ArcBallCam.cpp" "CMakeFiles/lab05.dir/ArcBallCam.cpp.obj" "gcc" "CMakeFiles/lab05.dir/ArcBallCam.cpp.obj.d"
+  "Z:/CSCI441/Graphics-MP/Car.cpp" "CMakeFiles/lab05.dir/Car.cpp.obj" "gcc" "CMakeFiles/lab05.dir/Car.cpp.obj.d"
   "Z:/CSCI441/Graphics-MP/FFPCam.cpp" "CMakeFiles/lab05.dir/FFPCam.cpp.obj" "gcc" "CMakeFiles/lab05.dir/FFPCam.cpp.obj.d"
   "Z:/CSCI441/Graphics-MP/Plane.cpp" "CMakeFiles/lab05.dir/Plane.cpp.obj" "gcc" "CMakeFiles/lab05.dir/Plane.cpp.obj.d"
   "Z:/CSCI441/Graphics-MP/Raft.cpp" "CMakeFiles/lab05.dir/Raft.cpp.obj" "gcc" "CMakeFiles/lab05.dir/Raft.cpp.obj.d"

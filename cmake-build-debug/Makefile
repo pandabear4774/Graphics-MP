@@ -176,6 +176,30 @@ ArcBallCam.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab05.dir\build.make CMakeFiles/lab05.dir/ArcBallCam.cpp.s
 .PHONY : ArcBallCam.cpp.s
 
+Car.obj: Car.cpp.obj
+.PHONY : Car.obj
+
+# target to build an object file
+Car.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab05.dir\build.make CMakeFiles/lab05.dir/Car.cpp.obj
+.PHONY : Car.cpp.obj
+
+Car.i: Car.cpp.i
+.PHONY : Car.i
+
+# target to preprocess a source file
+Car.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab05.dir\build.make CMakeFiles/lab05.dir/Car.cpp.i
+.PHONY : Car.cpp.i
+
+Car.s: Car.cpp.s
+.PHONY : Car.s
+
+# target to generate assembly for a file
+Car.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\lab05.dir\build.make CMakeFiles/lab05.dir/Car.cpp.s
+.PHONY : Car.cpp.s
+
 FFPCam.obj: FFPCam.cpp.obj
 .PHONY : FFPCam.obj
 
@@ -311,6 +335,9 @@ help:
 	@echo ... ArcBallCam.obj
 	@echo ... ArcBallCam.i
 	@echo ... ArcBallCam.s
+	@echo ... Car.obj
+	@echo ... Car.i
+	@echo ... Car.s
 	@echo ... FFPCam.obj
 	@echo ... FFPCam.i
 	@echo ... FFPCam.s

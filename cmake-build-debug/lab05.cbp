@@ -96,6 +96,12 @@
 		<Unit filename="Z:/CSCI441/Graphics-MP/ArcBallCam.h">
 			<Option target="lab05"/>
 		</Unit>
+		<Unit filename="Z:/CSCI441/Graphics-MP/Car.cpp">
+			<Option target="lab05"/>
+		</Unit>
+		<Unit filename="Z:/CSCI441/Graphics-MP/Car.hpp">
+			<Option target="lab05"/>
+		</Unit>
 		<Unit filename="Z:/CSCI441/Graphics-MP/FFPCam.cpp">
 			<Option target="lab05"/>
 		</Unit>

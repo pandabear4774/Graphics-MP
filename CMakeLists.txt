@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 project(lab05)
 set(CMAKE_CXX_STANDARD 17)
-set(SOURCE_FILES main.cpp A3Engine.cpp A3Engine.hpp ArcBallCam.h ArcBallCam.cpp Plane.cpp Plane.hpp Raft.cpp Raft.hpp Vehicle.cpp Vehicle.h FFPCam.cpp FFPCam.hpp)
+set(SOURCE_FILES main.cpp A3Engine.cpp A3Engine.hpp ArcBallCam.h ArcBallCam.cpp Plane.cpp Plane.hpp Raft.cpp Raft.hpp Car.cpp Car.hpp Vehicle.cpp Vehicle.h FFPCam.cpp FFPCam.hpp)
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
 # Windows with MinGW Installations
