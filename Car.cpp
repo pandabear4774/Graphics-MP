@@ -17,8 +17,8 @@
 Car::Car(GLuint shaderProgramHandle, GLint mvpMtxUniformLocation, GLint normMtx, GLint materialColorUniformLocation ){
     _angle = 0.0;
 
-    _positionX = 0;
-    _positionZ = 10;
+    _positionX = 10;
+    _positionZ = -10;
     _location = {_positionX,0,_positionZ};
 
     _wheelAngle = 0;
@@ -26,9 +26,13 @@ Car::Car(GLuint shaderProgramHandle, GLint mvpMtxUniformLocation, GLint normMtx,
     _shaderProgramHandle                            = shaderProgramHandle;
     _shaderProgramUniformLocations.mvpMtx           = mvpMtxUniformLocation;
     _shaderProgramUniformLocations.materialColor    = materialColorUniformLocation;
+
+    _scaleBody = glm::vec3(2.0f, 1.0f, 4.0f);
+
+    _scaleBody2 = glm::vec3(2.0f, 1.0f, 2.0f);
 }
 
-void Car::_drawCar(glm::mat4 viewMtx, glm::mat4 projMtx) {
+void Car::_drawCar(glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx) {
     glUseProgram(_shaderProgramHandle);
 
 
@@ -36,24 +40,40 @@ void Car::_drawCar(glm::mat4 viewMtx, glm::mat4 projMtx) {
     glm::mat4 transMtx = glm::translate(glm::mat4(1.0), glm::vec3(_positionX,0,_positionZ) );
     glm::mat4 rotateMtx = glm::rotate(glm::mat4(1.0), _angle, glm::vec3(0,1,0));
 
+    //draw wheels
+    for(const WheelData& wheel : _wheels){
+        glm::mat4 wheelModelMtx = transMtx * rotateMtx * wheel.modelMatrix;
+        _computeAndSendMatrixUniforms(wheelModelMtx,viewMtx,projMtx);
+
+        glUniform3fv(_shaderProgramUniformLocations.materialColor,1,&wheel.color[0]);
+        CSCI441::drawSolidCylinder(0.5,0.5,0.25,100,100);
+    }
+
+    _drawBody(modelMtx, viewMtx, projMtx);
 
 
 }
 
-void Car::_setupWheels() {
-    // generate 5 logs to make up the Car
+void Car::_drawWheels(glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx) {
+    // generate 4 wheels to make up the Car
     for(int i = 0; i < 4; i++){
 
     }
-
+    _computeAndSendMatrixUniforms(modelMtx, viewMtx, projMtx);
 }
 
-void Car::_drawBody(glm::mat4 viewMtx, glm::mat4 projMtx){
-
+void Car::_drawBody(glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx){
+    modelMtx = glm::scale( modelMtx, _scaleBody );
+    glUniform3fv(_shaderProgramUniformLocations.materialColor, 1, &_bodyColor[0]);
+    _computeAndSendMatrixUniforms(modelMtx, viewMtx, projMtx);
+    CSCI441::drawSolidCube(1);
 }
 
-void Car::_drawWheels(glm::mat4 viewMtx, glm::mat4 projMtx){
-
+void Car::_drawBody2(glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx){
+    modelMtx = glm::scale( modelMtx, _scaleBody2 );
+    glUniform3fv(_shaderProgramUniformLocations.materialColor, 1, &_bodyColor[0]);
+    _computeAndSendMatrixUniforms(modelMtx, viewMtx, projMtx);
+    CSCI441::drawSolidCube(0.1*25);
 }
 
 void Car::_moveForward(GLfloat WORLD_SIZE){

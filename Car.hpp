@@ -14,7 +14,7 @@ class Car: public Vehicle{
 public:
     Car(GLuint shaderProgramHandle, GLint mvpMtxUniformLocation, GLint normMtx, GLint materialColorUniformLocation );
 
-    void _drawCar(glm::mat4 viewMtx, glm::mat4 projMtx);
+    void _drawCar(glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx);
 
     void _moveForward(GLfloat WORLD_SIZE);
 
@@ -36,6 +36,16 @@ public:
 
     GLfloat _wheelAngle;
 
+    GLfloat _scaleBody;
+
+    GLfloat _scaleBody2;
+
+    GLfloat _translateBody2;
+
+    GLfloat _translateWheelLR;
+
+    GLfloat _translateWheelUD;
+
 private:
     GLuint _shaderProgramHandle;
     /// \desc stores the uniform locations needed for the plan information
@@ -48,7 +58,7 @@ private:
         GLint materialColor;
     } _shaderProgramUniformLocations;
 
-    glm::vec3 _wheelColor;
+    glm::vec3 _wheelColor = glm::vec3(0, 0, 0);
 
     glm::vec3 _bodyColor;
 
@@ -62,11 +72,9 @@ private:
     std::vector<WheelData> _wheels;
 
 
-    void _setupWheels();
+    void _drawWheels(glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx) const;
 
-    void _drawBody();
-
-    void _drawWheels() const;
+    void _drawBody(glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx) const;
 
     void _computeAndSendMatrixUniforms(glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx) const;
 };
