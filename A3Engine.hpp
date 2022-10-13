@@ -98,8 +98,15 @@ private:
         glm::vec3 color;
     };
 
+    struct BuildingData {
+        glm::mat4 modelMatrix;
+        glm::vec3 color;
+    };
+
 
     std::vector<BuoyData> _buoys;
+
+    std::vector<BuildingData> _buildings;
 
 
     /// \desc generates building information to make up our scene

@@ -1,3 +1,3 @@
-Z:/CSCI441/Graphics-MP/cmake-build-debug/CMakeFiles/lab05.dir
-Z:/CSCI441/Graphics-MP/cmake-build-debug/CMakeFiles/edit_cache.dir
-Z:/CSCI441/Graphics-MP/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/cmake-build-debug/CMakeFiles/lab05.dir

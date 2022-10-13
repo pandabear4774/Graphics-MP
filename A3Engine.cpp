@@ -216,7 +216,7 @@ void A3Engine::_generateEnvironment() {
                 glm::mat4 transToSpotMtx = glm::translate( glm::mat4(1.0), glm::vec3(i, 0.0f, j) );
 
                 // compute random radius
-                GLdouble radius = powf(getRand(), 2)*5 + 1;
+                GLdouble radius = powf(getRand(), 2)*3 + 1;
                 // scale to buoy size
                 glm::mat4 scaleToHeightMtx = glm::scale( glm::mat4(1.0), glm::vec3(radius, radius, radius) );
 
@@ -230,6 +230,28 @@ void A3Engine::_generateEnvironment() {
                 // store buoy properties
                 BuoyData currentBuoy = {modelMatrix, color};
                 _buoys.emplace_back( currentBuoy );
+            }
+
+            if( i % 2 && j % 2 && getRand() > 0.025f && getRand() < 0.05 ) {
+                // translate to spot
+                glm::mat4 transToSpotMtx = glm::translate( glm::mat4(1.0), glm::vec3(i, 0.0f, j) );
+
+                // compute random height
+                GLdouble height = powf(getRand(), 2.5)*10 + 1;
+                // scale to building size
+                glm::mat4 scaleToHeightMtx = glm::scale( glm::mat4(1.0), glm::vec3(1, height, 1) );
+
+                // translate up to grid
+                glm::mat4 transToHeight = glm::translate( glm::mat4(1.0), glm::vec3(0, height/2.0f, 0) );
+
+                // compute full model matrix
+                glm::mat4 modelMatrix = transToHeight * scaleToHeightMtx * transToSpotMtx;
+
+                // compute random color
+                glm::vec3 color( getRand(), getRand(), getRand() );
+                // store building properties
+                BuildingData currentBuilding = {modelMatrix, color};
+                _buildings.emplace_back( currentBuilding );
             }
         }
     }
@@ -347,6 +369,14 @@ void A3Engine::_renderScene(glm::mat4 viewMtx, glm::mat4 projMtx) const {
 
         CSCI441::drawSolidSphere(1.0, 100,100);
 
+    }
+
+    for( const BuildingData& currentBuilding : _buildings ) {
+        _computeAndSendMatrixUniforms(currentBuilding.modelMatrix, viewMtx, projMtx);
+
+        glUniform3fv(_lightingShaderUniformLocations.materialColor, 1, &currentBuilding.color[0]);
+
+        CSCI441::drawSolidCube(1.0);
     }
     //// END DRAWING THE BUOYS ////
 
