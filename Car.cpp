@@ -13,6 +13,8 @@
 
 #include <glm/glm.hpp>
 
+#include <iostream>
+
 
 Car::Car(GLuint shaderProgramHandle, GLint mvpMtxUniformLocation, GLint normMtx, GLint materialColorUniformLocation ){
     _angle = 0.0;
@@ -21,7 +23,7 @@ Car::Car(GLuint shaderProgramHandle, GLint mvpMtxUniformLocation, GLint normMtx,
     _positionZ = -10;
     _location = {_positionX,0,_positionZ};
 
-    _wheelAngle = 0;
+    _wheelAngle = 0.0;
 
     _shaderProgramHandle                            = shaderProgramHandle;
     _shaderProgramUniformLocations.mvpMtx           = mvpMtxUniformLocation;
@@ -35,7 +37,7 @@ Car::Car(GLuint shaderProgramHandle, GLint mvpMtxUniformLocation, GLint normMtx,
 
     _translateBody = glm::vec3(0.0f, 0.75f, 0.0f);
 
-    _translateBody2 = glm::vec3(0.0f, 1.25f, -0.5f);
+    _translateBody2 = glm::vec3(0.0f, 1.35f, -0.5f);
 
     _translateWheelsLR = glm::vec3(1.0f, 0.0f, 0.0f);
 
@@ -63,15 +65,15 @@ void Car::_drawCar(glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx) {
 
 void Car::_drawWheels(glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx) const{
     glm::mat4 modelMtxFR = glm::translate(modelMtx, _translateWheelsUD + _translateWheelsLR + glm::vec3(0, 0.3f, 0));
+    modelMtxFR = glm::rotate(modelMtxFR, (float)_wheelAngle, glm::vec3(0, 1, 0));
     modelMtxFR = glm::rotate(modelMtxFR, (float) M_PI/2, glm::vec3(0, 0, 1));
-    modelMtxFR = glm::rotate(modelMtxFR, _wheelAngle, glm::vec3(0, 1, 0));
     _computeAndSendMatrixUniforms(modelMtxFR,viewMtx,projMtx);
     glUniform3fv(_shaderProgramUniformLocations.materialColor,1,&_wheelColor[0]);
     CSCI441::drawSolidCylinder(0.25,0.25,0.2,50,50);
 
     glm::mat4 modelMtxFL = glm::translate(modelMtx, _translateWheelsUD - _translateWheelsLR + glm::vec3(0.2f, 0.3f, 0));
+    modelMtxFL = glm::rotate(modelMtxFL, (float)_wheelAngle, glm::vec3(0, 1, 0));
     modelMtxFL = glm::rotate(modelMtxFL, (float) M_PI/2, glm::vec3(0, 0, 1));
-    modelMtxFL = glm::rotate(modelMtxFL, _wheelAngle, glm::vec3(0, 1, 0));
     _computeAndSendMatrixUniforms(modelMtxFL,viewMtx,projMtx);
     glUniform3fv(_shaderProgramUniformLocations.materialColor,1,&_wheelColor[0]);
     CSCI441::drawSolidCylinder(0.25,0.25,0.2,50,50);
@@ -122,16 +124,16 @@ void Car::_moveBackward(GLfloat WORLD_SIZE){
 void Car::_rotateRight() {
     // increase the Car angle, pointing the Car right
     _angle -= 0.01;
-    if (_wheelAngle > -45){
-        _wheelAngle -= 1;
+    if (_wheelAngle > -(float)M_PI/4){
+        _wheelAngle -= (float)M_PI/32;
     }
 }
 
 void Car::_rotateLeft(){
     // decrease the Car angle, pointing the Car left
     _angle += 0.01;
-    if (_wheelAngle < 45){
-        _wheelAngle += 1;
+    if (_wheelAngle < (float)M_PI/4){
+        _wheelAngle += (float)M_PI/32;
     }
 };
 

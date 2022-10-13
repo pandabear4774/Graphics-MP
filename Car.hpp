@@ -65,15 +65,6 @@ private:
 
     glm::vec3 _bodyColor;
 
-    struct WheelData {
-        glm::mat4 modelMatrix;
-
-        glm::vec3 color;
-    };
-
-
-    std::vector<WheelData> _wheels;
-
 
     void _drawWheels(glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx) const;
 
