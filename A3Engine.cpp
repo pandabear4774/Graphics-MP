@@ -120,6 +120,8 @@ void A3Engine::_setupShaders() {
     _lightingShaderUniformLocations.normMtx        = _lightingShaderProgram->getUniformLocation("normMatrix");
     _lightingShaderUniformLocations.lightDirection = _lightingShaderProgram->getUniformLocation("lightDir");
     _lightingShaderUniformLocations.lightColor     = _lightingShaderProgram->getUniformLocation("lightColor");
+    _lightingShaderUniformLocations.cameraPosition     = _lightingShaderProgram->getUniformLocation("cameraPosition");
+    _lightingShaderUniformLocations.modelMatrix     = _lightingShaderProgram->getUniformLocation("modelMatrix");
 
     _lightingShaderAttributeLocations.vPos         = _lightingShaderProgram->getAttributeLocation("vPos");
     // TODO #3B: assign attributes
@@ -596,6 +598,7 @@ void A3Engine::_updateScene() {
             _cameraFFP->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
             _cameraFFP->recomputeOrientation();
         }
+        //_lightingShaderProgram->setProgramUniform(_lightingShaderUniformLocations.cameraPosition, _camera->getPosition());
     }
     // go backward
     if( _keys[GLFW_KEY_S] ) {
@@ -685,6 +688,7 @@ void A3Engine::_updateScene() {
 
         _cameraFFP->recomputeOrientation();
     }
+    //_lightingShaderProgram->setProgramUniform(_lightingShaderUniformLocations.cameraPosition, _camera->getPosition());
 }
 
 void A3Engine::run() {
@@ -762,9 +766,13 @@ void A3Engine::_computeAndSendMatrixUniforms(glm::mat4 modelMtx, glm::mat4 viewM
     // then send it to the shader on the GPU to apply to every vertex
     _lightingShaderProgram->setProgramUniform(_lightingShaderUniformLocations.mvpMatrix, mvpMtx);
 
+    _lightingShaderProgram->setProgramUniform(_lightingShaderUniformLocations.modelMatrix, modelMtx);
+
     glm::mat3 normalMtx = glm::mat3(glm::transpose(glm::inverse(modelMtx)));
 
     _lightingShaderProgram->setProgramUniform(_lightingShaderUniformLocations.normMtx, normalMtx);
+
+    _lightingShaderProgram->setProgramUniform(_lightingShaderUniformLocations.cameraPosition, _camera->getPosition());
 
 
 }

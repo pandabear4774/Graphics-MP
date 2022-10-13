@@ -5,6 +5,8 @@ uniform mat4 mvpMatrix;                 // the precomputed Model-View-Projection
 uniform mat3 normMatrix;
 uniform vec3 lightDir;
 uniform vec3 lightColor;
+uniform vec3 cameraPosition;
+uniform mat4 modelMatrix;
 
 uniform vec3 materialColor;             // the material color for our vertex (& whole object)
 
@@ -19,8 +21,22 @@ void main() {
     // transform & output the vertex in clip space
     gl_Position = mvpMatrix * vec4(vPos, 1.0);
 
+    //ambient
+    float ambientStrength = 0.15;
+    vec3 ambientComponent = ambientStrength * lightColor;
+
+    //diffuse
     vec3 reverseLightVector = normalize(-1 * lightDir);
     vec3 trueVecNormal = vecNormal * normMatrix;
-    vec3 diffuseComponent = lightColor * materialColor * max(dot(reverseLightVector, trueVecNormal), 0);
-    color = diffuseComponent;
+    vec3 diffuseComponent = lightColor * max(dot(reverseLightVector, trueVecNormal), 0);
+
+    //specular
+    float specularStrength = 0.2;
+    vec3 worldCords = vec3(modelMatrix * vec4(vPos,1.0));
+    vec3 viewDir = normalize(cameraPosition - worldCords);
+    vec3 reflectDir = reflect(-reverseLightVector, trueVecNormal);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 3);
+    vec3 specularComponent = specularStrength * spec * lightColor;
+
+    color = materialColor * (ambientComponent + diffuseComponent + specularComponent);
 }

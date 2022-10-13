@@ -134,6 +134,9 @@ private:
 
         GLuint lightColor;
 
+        GLuint cameraPosition;
+
+        GLuint modelMatrix;
     } _lightingShaderUniformLocations;
     /// \desc stores the locations of all of our shader attributes
     struct LightingShaderAttributeLocations {
