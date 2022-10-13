@@ -40,11 +40,14 @@ public:
 
     glm::vec3 _scaleBody2;
 
+    glm::vec3 _translateBody;
+
     glm::vec3 _translateBody2;
 
-    glm::vec3 _translateWheelLR;
+    glm::vec3 _translateWheelsLR;
 
-    glm::vec3 _translateWheelUD;
+    glm::vec3 _translateWheelsUD;
+
 
 private:
     GLuint _shaderProgramHandle;
@@ -58,7 +61,7 @@ private:
         GLint materialColor;
     } _shaderProgramUniformLocations;
 
-    glm::vec3 _wheelColor = glm::vec3(0, 0, 0);
+    glm::vec3 _wheelColor;
 
     glm::vec3 _bodyColor;
 
