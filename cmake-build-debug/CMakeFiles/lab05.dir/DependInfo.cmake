@@ -1,22 +1,20 @@
+
+# Consider dependencies only in project.
+set(CMAKE_DEPENDS_IN_PROJECT_ONLY OFF)
+
 # The set of languages for which implicit dependencies are needed:
 set(CMAKE_DEPENDS_LANGUAGES
-  "CXX"
   )
-# The set of files for implicit dependencies of each language:
-set(CMAKE_DEPENDS_CHECK_CXX
-  "/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/A3Engine.cpp" "/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/cmake-build-debug/CMakeFiles/lab05.dir/A3Engine.cpp.o"
-  "/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/ArcBallCam.cpp" "/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/cmake-build-debug/CMakeFiles/lab05.dir/ArcBallCam.cpp.o"
-  "/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/FFPCam.cpp" "/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/cmake-build-debug/CMakeFiles/lab05.dir/FFPCam.cpp.o"
-  "/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/Plane.cpp" "/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/cmake-build-debug/CMakeFiles/lab05.dir/Plane.cpp.o"
-  "/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/Raft.cpp" "/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/cmake-build-debug/CMakeFiles/lab05.dir/Raft.cpp.o"
-  "/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/Vehicle.cpp" "/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/cmake-build-debug/CMakeFiles/lab05.dir/Vehicle.cpp.o"
-  "/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/main.cpp" "/Users/kurtain/Downloads/Graphics-MP-main/Graphics-MP/cmake-build-debug/CMakeFiles/lab05.dir/main.cpp.o"
-  )
-set(CMAKE_CXX_COMPILER_ID "AppleClang")
 
-# The include file search paths:
-set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "/usr/local/include"
+# The set of dependency files which are needed:
+set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "Z:/CSCI441/Graphics-MP/A3Engine.cpp" "CMakeFiles/lab05.dir/A3Engine.cpp.obj" "gcc" "CMakeFiles/lab05.dir/A3Engine.cpp.obj.d"
+  "Z:/CSCI441/Graphics-MP/ArcBallCam.cpp" "CMakeFiles/lab05.dir/ArcBallCam.cpp.obj" "gcc" "CMakeFiles/lab05.dir/ArcBallCam.cpp.obj.d"
+  "Z:/CSCI441/Graphics-MP/FFPCam.cpp" "CMakeFiles/lab05.dir/FFPCam.cpp.obj" "gcc" "CMakeFiles/lab05.dir/FFPCam.cpp.obj.d"
+  "Z:/CSCI441/Graphics-MP/Plane.cpp" "CMakeFiles/lab05.dir/Plane.cpp.obj" "gcc" "CMakeFiles/lab05.dir/Plane.cpp.obj.d"
+  "Z:/CSCI441/Graphics-MP/Raft.cpp" "CMakeFiles/lab05.dir/Raft.cpp.obj" "gcc" "CMakeFiles/lab05.dir/Raft.cpp.obj.d"
+  "Z:/CSCI441/Graphics-MP/Vehicle.cpp" "CMakeFiles/lab05.dir/Vehicle.cpp.obj" "gcc" "CMakeFiles/lab05.dir/Vehicle.cpp.obj.d"
+  "Z:/CSCI441/Graphics-MP/main.cpp" "CMakeFiles/lab05.dir/main.cpp.obj" "gcc" "CMakeFiles/lab05.dir/main.cpp.obj.d"
   )
 
 # Targets to which this target links.
