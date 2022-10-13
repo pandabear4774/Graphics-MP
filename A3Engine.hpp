@@ -68,11 +68,12 @@ private:
 
     Vehicle* _currVehicle;
 
-    int cameraType = 1;
+    bool FFPToggle;
 
     Plane* _plane;
     /// \desc the static fixed camera in our world
     CSCI441::Camera* _camera;
+    CSCI441::Camera* _cameraFFP;
     /// \desc pair of values to store the speed the camera can move/rotate.
     /// \brief x = forward/backward delta, y = rotational delta
     glm::vec2 _cameraSpeed;

@@ -46,6 +46,9 @@ void A3Engine::handleKeyEvent(GLint key, GLint action) {
 
     if(action == GLFW_PRESS) {
         switch( key ) {
+            case GLFW_KEY_6:
+                FFPToggle = !FFPToggle;
+                break;
             // quit!
             case GLFW_KEY_Q:
             case GLFW_KEY_ESCAPE:
@@ -75,17 +78,8 @@ void A3Engine::handleCursorPositionEvent(glm::vec2 currMousePosition) {
     if(_leftMouseButtonState == GLFW_PRESS) {
         // rotate the camera by the distance the mouse moved
 
-        if(cameraType == 1 || cameraType == 2) {
-            _camera->rotate((currMousePosition.x - _mousePosition.x) * 0.005f,
-                            (_mousePosition.y - currMousePosition.y) * 0.005f );
-
-            _camera->recomputeOrientation();
-        } else if(cameraType == 3){
-            _camera->rotate((currMousePosition.x - _mousePosition.x) * 0.005f,
-                            (_mousePosition.y - currMousePosition.y) * 0.005f );
-
-            _camera->recomputeOrientation();
-        }
+        _camera->rotate((currMousePosition.x - _mousePosition.x) * 0.005f,
+                        (_mousePosition.y - currMousePosition.y) * 0.005f );
 
 
 
@@ -238,6 +232,7 @@ void A3Engine::_generateEnvironment() {
 
 void A3Engine::_setupScene() {
     _changeToFreeCam();
+    _cameraFFP = new FFPCam();
     _cameraSpeed = glm::vec2(0.25f, 0.02f);
 
 
@@ -250,22 +245,23 @@ void A3Engine::_setupScene() {
 
 }
 void A3Engine::_changeToFFPCam() {
-    _camera = new FFPCam();
+    _cameraFFP = new FFPCam();
 
-    _camera->setPosition(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y +1, _currVehicle->_location.z));
+    _cameraFFP->setPosition(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y +1, _currVehicle->_location.z));
 
     // set initial radius and angles
-    _camera->setPhi(2);
-    _camera->setTheta(_currVehicle->_direction);
-    _camera->recomputeOrientation();
+    _cameraFFP->setPhi(2);
+    _cameraFFP->setTheta(_currVehicle->_direction);
+    _cameraFFP->recomputeOrientation();
 
 }
 void A3Engine::_changeToFreeCam() {
     _camera = new CSCI441::FreeCam();
-    _camera->setPosition( glm::vec3(1.5*WORLD_SIZE, 40.0f, WORLD_SIZE) );
-    _camera->setTheta( -M_PI / 3.0f );
-    _camera->setPhi( _currVehicle->_direction );
-    _camera->recomputeOrientation();
+    _camera->setPosition( glm::vec3( WORLD_SIZE, 40, WORLD_SIZE ) ); // give the camera a scenic starting point
+    //_freeCam->computeViewMatrix();  // TODO #4 remove this line
+    _camera->setTheta( -M_PI / 4.0f );                              // and a nice view
+    _camera->setPhi( M_PI / 2.8f );
+    _camera->recomputeOrientation();                                   // orient the camera based on direction
 }
 
 void A3Engine::_changeToArcBallCam() {
@@ -372,10 +368,10 @@ void A3Engine::_updateScene() {
 
             _currVehicle->_direction = -_raft->_angle;
 
-            if(cameraType == 3){
-                _camera->setTheta(_currVehicle->_direction);
-                _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
-                _camera->recomputeOrientation();
+            if(FFPToggle){
+                _cameraFFP->setTheta(_currVehicle->_direction);
+                _cameraFFP->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
+                _cameraFFP->recomputeOrientation();
             }
         }
 
@@ -388,10 +384,10 @@ void A3Engine::_updateScene() {
             if (_plane->_direction > M_PI * 2.0f) {
                 _plane->_direction -= M_PI * 2.0f;
             }
-            if(cameraType == 3){
-                _camera->setTheta(_currVehicle->_direction - M_PI/2);
-                _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
-                _camera->recomputeOrientation();
+            if(FFPToggle){
+                _cameraFFP->setTheta(_currVehicle->_direction - M_PI/2);
+                _cameraFFP->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
+                _cameraFFP->recomputeOrientation();
             }
         }
     }
@@ -403,10 +399,10 @@ void A3Engine::_updateScene() {
 
             _currVehicle->_direction = -_raft->_angle;
 
-            if(cameraType == 3){
-                _camera->setTheta(_currVehicle->_direction);
-                _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
-                _camera->recomputeOrientation();
+            if(FFPToggle){
+                _cameraFFP->setTheta(_currVehicle->_direction);
+                _cameraFFP->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
+                _cameraFFP->recomputeOrientation();
             }
         }
 
@@ -417,10 +413,10 @@ void A3Engine::_updateScene() {
             if (_plane->_direction < 0.0f) {
                 _plane->_direction += M_PI * 2.0f;
             }
-            if(cameraType == 3){
-                _camera->setTheta(_currVehicle->_direction - M_PI/2);
-                _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
-                _camera->recomputeOrientation();
+            if(FFPToggle){
+                _cameraFFP->setTheta(_currVehicle->_direction - M_PI/2);
+                _cameraFFP->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
+                _cameraFFP->recomputeOrientation();
             }
         }
     }
@@ -437,12 +433,11 @@ void A3Engine::_updateScene() {
         }
 
         // update lookatPoint and recompute orientation
-        if(cameraType == 1){
-            _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y , _currVehicle->_location.z));
-            _camera->recomputeOrientation();
-        } else if(cameraType == 3){
-            _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
-            _camera->recomputeOrientation();
+        _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y , _currVehicle->_location.z));
+        _camera->recomputeOrientation();
+        if(FFPToggle){
+            _cameraFFP->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
+            _cameraFFP->recomputeOrientation();
         }
     }
     // go backward
@@ -456,12 +451,11 @@ void A3Engine::_updateScene() {
             _plane->flyForward();
         }
 
-        if(cameraType == 1){
-            _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y , _currVehicle->_location.z));
-            _camera->recomputeOrientation();
-        } else if(cameraType == 3){
-            _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5, _currVehicle->_location.z));
-            _camera->recomputeOrientation();
+        _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y , _currVehicle->_location.z));
+        _camera->recomputeOrientation();
+        if(FFPToggle){
+            _cameraFFP->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5, _currVehicle->_location.z));
+            _cameraFFP->recomputeOrientation();
         }
         // update lookout point and recomputer orientation
 
@@ -471,9 +465,10 @@ void A3Engine::_updateScene() {
         _currVehicle = _raft;
 
 
-        if(cameraType == 3){
-            _camera->setTheta(_currVehicle->_direction);
-            _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
+        if(FFPToggle){
+            _cameraFFP->setTheta(_currVehicle->_direction);
+            _cameraFFP->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
+            _cameraFFP->recomputeOrientation();
         }
         _camera->recomputeOrientation();
     }
@@ -483,11 +478,12 @@ void A3Engine::_updateScene() {
         _currVehicle->_location = _plane->_location;
         _currVehicle->_direction = _plane->_direction;
 
-        if(cameraType == 3){
-            _camera->setTheta(_currVehicle->_direction - M_PI/2);
-            _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
+        if(FFPToggle){
+            _cameraFFP->setTheta(_currVehicle->_direction - M_PI/2);
+            _cameraFFP->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
+            _cameraFFP->recomputeOrientation();
         }
-        
+
         _camera->recomputeOrientation();
     }
     if( _keys[GLFW_KEY_3]){
@@ -497,32 +493,29 @@ void A3Engine::_updateScene() {
     }
 
     if(_keys[GLFW_KEY_4]){
-        cameraType = 1;
         _changeToArcBallCam();
         _camera->recomputeOrientation();
     }
 
     if(_keys[GLFW_KEY_5]){
-        cameraType = 2;
         _changeToFreeCam();
         _camera->recomputeOrientation();
     }
 
     if(_keys[GLFW_KEY_6]){
-        cameraType = 3;
         _changeToFFPCam();
 
         if(_currVehicle == _raft) {
-            _camera->setTheta(_currVehicle->_direction);
-            _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
+            _cameraFFP->setTheta(_currVehicle->_direction);
+            _cameraFFP->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
         }
 
         if(_currVehicle == _plane) {
-            _camera->setTheta(_currVehicle->_direction - M_PI/2);
-            _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
+            _cameraFFP->setTheta(_currVehicle->_direction - M_PI/2);
+            _cameraFFP->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
         }
 
-        _camera->recomputeOrientation();
+        _cameraFFP->recomputeOrientation();
     }
 }
 
@@ -531,8 +524,12 @@ void A3Engine::run() {
     //	until the user decides to close the window and quit the program.  Without a loop, the
     //	window will display once and then the program exits.
     while( !glfwWindowShouldClose(_window) ) {	        // check if the window was instructed to be closed
+
+
+
         glDrawBuffer( GL_BACK );				        // work with our back frame buffer
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );	// clear the current color contents and depth buffer in the window
+
 
         // Get the size of our framebuffer.  Ideally this should be the same dimensions as our window, but
         // when using a Retina display the actual window can be larger than the requested window.  Therefore,
@@ -541,7 +538,7 @@ void A3Engine::run() {
         glfwGetFramebufferSize( _window, &framebufferWidth, &framebufferHeight );
 
         // update the viewport - tell OpenGL we want to render to the whole window
-        glViewport( 0, 0, framebufferWidth, framebufferHeight );
+        glViewport( 0, 0, framebufferWidth, framebufferHeight);
 
         // set the projection matrix based on the window size
         // use a perspective projection that ranges
@@ -555,10 +552,35 @@ void A3Engine::run() {
         // draw everything to the window
         _renderScene(viewMatrix, projectionMatrix);
 
+        if(FFPToggle){
+            glScissor(0,0,framebufferWidth/3,framebufferHeight/3);
+            glEnable(GL_SCISSOR_TEST);
+            glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );	// clear the current color contents and depth buffer in the window
+            glDisable(GL_SCISSOR_TEST);
+
+            glViewport( 0, 0, framebufferWidth/3, framebufferHeight/3);
+
+            // set the projection matrix based on the window size
+            // use a perspective projection that ranges
+            // with a FOV of 45 degrees, for our current aspect ratio, and Z ranges from [0.001, 1000].
+            projectionMatrix = glm::perspective( 45.0f, (GLfloat) framebufferWidth / (GLfloat) framebufferHeight, 0.001f, 1000.0f );
+
+            // set up our look at matrix to position our camera
+            viewMatrix = _cameraFFP->getViewMatrix();
+        }
+
+
+
+        // draw everything to the window
+        _renderScene(viewMatrix, projectionMatrix);
+
         _updateScene();
 
         glfwSwapBuffers(_window);                       // flush the OpenGL commands and make sure they get rendered!
         glfwPollEvents();				                // check for any events and signal to redraw screen
+
+
+
     }
 }
 
