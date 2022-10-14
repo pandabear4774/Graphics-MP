@@ -15,19 +15,22 @@
 
 
 Raft::Raft(GLuint shaderProgramHandle, GLint mvpMtxUniformLocation, GLint normMtx, GLint materialColorUniformLocation ){
+    ////RAFT STATE VALUES
     _angle = 0.0;
-
     _positionX = 0;
     _positionZ = 10;
     _location = {_positionX,0,_positionZ};
 
+    ////MODEL TRANSFORMATION VALUES
     _leftPaddleAngle = 0;
     _rightPaddleAngle = 0;
 
+    //setup shaders
     _shaderProgramHandle                            = shaderProgramHandle;
     _shaderProgramUniformLocations.mvpMtx           = mvpMtxUniformLocation;
     _shaderProgramUniformLocations.materialColor    = materialColorUniformLocation;
 
+    //model color vectors
     _logColor = glm::vec3(0.2,0,0);
     _oarColor = glm::vec3(0,0,0.2);
 

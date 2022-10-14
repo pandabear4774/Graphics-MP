@@ -89,12 +89,12 @@ private:
     GLuint _groundVAO;
     /// \desc the number of points that make up our ground object
     GLsizei _numGroundPoints;
-
+    //// \desc VAO for our buildings
     GLuint _buildingVAO;
-
+    //// \desc VAO for our pyramid
     GLuint _pyramidVAO;
 
-    /// \desc creates the ground VAO
+    /// \desc creates the ground, building, and pyramid VAO
     void _createGroundBuffers();
     void _createBuildingBuffers();
     void _createPyramidBuffers();
@@ -109,6 +109,7 @@ private:
         glm::vec3 color;
     };
 
+    //// \desc Struct to hold our Point Light information
     struct PointLight {
         glm::vec3 position;
 
@@ -141,13 +142,13 @@ private:
         GLint materialColor;
         // TODO #1: add new uniforms
         GLuint normMtx;
-
+        //// \desc holds direction of our lighting
         GLuint lightDirection;
-
+        //// \desc holds color of our lighting
         GLuint lightColor;
-
+        //// \desc holds the current position of the camera
         GLuint cameraPosition;
-
+        //// \desc holds our model matrix handle
         GLuint modelMatrix;
     } _lightingShaderUniformLocations;
     /// \desc stores the locations of all of our shader attributes
@@ -169,7 +170,7 @@ private:
     void _computeAndSendMatrixUniforms(glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx) const;
 
 };
-
+//// CALLBACKS
 void lab05_engine_keyboard_callback(GLFWwindow *window, int key, int scancode, int action, int mods );
 void lab05_engine_cursor_callback(GLFWwindow *window, double x, double y );
 void lab05_engine_mouse_button_callback(GLFWwindow *window, int button, int action, int mods );

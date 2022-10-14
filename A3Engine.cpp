@@ -27,7 +27,7 @@ GLfloat getRand() {
 A3Engine::A3Engine()
         : CSCI441::OpenGLEngine(4, 1,
                                 640, 480,
-                                "Lab05: Flight Simulator v0.41 alpha") {
+                                "Graphics MP") {
 
     for(auto& _key : _keys) _key = GL_FALSE;
 
@@ -41,11 +41,14 @@ A3Engine::~A3Engine() {
 }
 
 void A3Engine::handleKeyEvent(GLint key, GLint action) {
+    //register key press or repeat
     if(key != GLFW_KEY_UNKNOWN)
         _keys[key] = ((action == GLFW_PRESS) || (action == GLFW_REPEAT));
 
+    //handle FPP toggle and exit window keys
     if(action == GLFW_PRESS) {
         switch( key ) {
+            //toggle FPP
             case GLFW_KEY_6:
                 FFPToggle = !FFPToggle;
                 break;
@@ -114,17 +117,17 @@ void A3Engine::_setupOpenGL() {
 
 void A3Engine::_setupShaders() {
     _lightingShaderProgram = new CSCI441::ShaderProgram("shaders/lab05.v.glsl", "shaders/lab05.f.glsl" );
+    // assign uniform locations
     _lightingShaderUniformLocations.mvpMatrix      = _lightingShaderProgram->getUniformLocation("mvpMatrix");
     _lightingShaderUniformLocations.materialColor  = _lightingShaderProgram->getUniformLocation("materialColor");
-    // TODO #3A: assign uniforms
     _lightingShaderUniformLocations.normMtx        = _lightingShaderProgram->getUniformLocation("normMatrix");
     _lightingShaderUniformLocations.lightDirection = _lightingShaderProgram->getUniformLocation("lightDir");
     _lightingShaderUniformLocations.lightColor     = _lightingShaderProgram->getUniformLocation("lightColor");
     _lightingShaderUniformLocations.cameraPosition     = _lightingShaderProgram->getUniformLocation("cameraPosition");
     _lightingShaderUniformLocations.modelMatrix     = _lightingShaderProgram->getUniformLocation("modelMatrix");
 
+    // assign attribute locations
     _lightingShaderAttributeLocations.vPos         = _lightingShaderProgram->getAttributeLocation("vPos");
-    // TODO #3B: assign attributes
     _lightingShaderAttributeLocations.vecNormal    = _lightingShaderProgram->getAttributeLocation("vecNormal");
 
 }
@@ -132,23 +135,28 @@ void A3Engine::_setupShaders() {
 void A3Engine::_setupBuffers() {
     CSCI441::setVertexAttributeLocations( _lightingShaderAttributeLocations.vPos,  _lightingShaderAttributeLocations.vecNormal);
 
+    //initialize raft object
     _raft = new Raft(_lightingShaderProgram->getShaderProgramHandle(),
                      _lightingShaderUniformLocations.mvpMatrix,
                      _lightingShaderUniformLocations.normMtx,
                      _lightingShaderUniformLocations.materialColor);
 
+    //initialize plane object
     _plane = new Plane(_lightingShaderProgram->getShaderProgramHandle(),
                        _lightingShaderUniformLocations.mvpMatrix,
                        _lightingShaderUniformLocations.normMtx,
                        _lightingShaderUniformLocations.materialColor);
 
+    //initialize car object
     _car = new Car(_lightingShaderProgram->getShaderProgramHandle(),
                        _lightingShaderUniformLocations.mvpMatrix,
                        _lightingShaderUniformLocations.normMtx,
                        _lightingShaderUniformLocations.materialColor);
 
+    //assign initial vehicle
     _currVehicle = _raft;
 
+    //create buffers
     _createPyramidBuffers();
     _createGroundBuffers();
     _createBuildingBuffers();
@@ -157,12 +165,14 @@ void A3Engine::_setupBuffers() {
 }
 
 void A3Engine::_createPyramidBuffers(){
+    //struct to hold ground pyramid vertices and normals
     struct Vertex {
         GLfloat x, y, z;
         GLfloat normalX, normalY, normalZ;
 
     };
 
+    //pyramid vertices and normals
     Vertex groundQuad[5] = {
             {-1.0f, 0.0f, -1.0f,-1.0,0.0,-1.0},
             { 1.0f, 0.0f, -1.0f,1.0,0.0,-1.0},
@@ -194,12 +204,14 @@ void A3Engine::_createPyramidBuffers(){
 }
 
 void A3Engine::_createBuildingBuffers(){
+    //struct to hold building vertices and normals
     struct Vertex {
         GLfloat x, y, z;
         GLfloat normalX, normalY, normalZ;
 
     };
 
+    //building vertices and normals
     Vertex groundQuad[8] = {
             {-1.0f, 0.0f, -1.0f,-1.0,0.0,-1.0},
             { 1.0f, 0.0f, -1.0f,1.0,0.0,-1.0},
@@ -233,12 +245,14 @@ void A3Engine::_createBuildingBuffers(){
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 }
 void A3Engine::_createGroundBuffers() {
+    //struct to hold ground vertices and normals
     struct Vertex {
         GLfloat x, y, z;
         GLfloat normalX, normalY, normalZ;
 
     };
 
+    //ground vertices and normals
     Vertex groundQuad[4] = {
             {-1.0f, 0.0f, -1.0f,-1.0,1.0,-1.0},
             { 1.0f, 0.0f, -1.0f,1.0,1.0,-1.0},
@@ -269,9 +283,7 @@ void A3Engine::_createGroundBuffers() {
 }
 
 void A3Engine::_generateEnvironment() {
-    //******************************************************************
-    // parameters to make up our grid size and spacing, feel free to
-    // play around with this
+    // parameters to make up our grid size and spacing
     const GLfloat GRID_WIDTH = WORLD_SIZE * 1.8f;
     const GLfloat GRID_LENGTH = WORLD_SIZE * 1.8f;
     const GLfloat GRID_SPACING_WIDTH = 1.0f;
@@ -285,9 +297,7 @@ void A3Engine::_generateEnvironment() {
 
     srand( time(0) );                                                   // seed our RNG
 
-    // psych! everything's on a grid.
-
-    // Draws "buoys" instead of buildings
+    // Draws randomly generated "buoys" instead of lab05 buildings
     for(int i = LEFT_END_POINT; i < RIGHT_END_POINT; i += GRID_SPACING_WIDTH) {
         for(int j = BOTTOM_END_POINT; j < TOP_END_POINT; j += GRID_SPACING_LENGTH) {
 
@@ -338,11 +348,12 @@ void A3Engine::_generateEnvironment() {
 }
 
 void A3Engine::_setupScene() {
+    //initialize camera
     _changeToFreeCam();
     _cameraFFP = new FFPCam();
     _cameraSpeed = glm::vec2(0.25f, 0.02f);
 
-
+    //initialize lighting
     glm::vec3 lightDirection = glm::vec3(-1,-1,-1);
     glm::vec3 lightColor = glm::vec3(1,1,1);
 
@@ -356,8 +367,8 @@ void A3Engine::_setupScene() {
 
 }
 void A3Engine::_changeToFFPCam() {
+    //create FFPcam and set position to current vehicle
     _cameraFFP = new FFPCam();
-
     _cameraFFP->setPosition(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y +1, _currVehicle->_location.z));
 
     // set initial radius and angles
@@ -367,12 +378,14 @@ void A3Engine::_changeToFFPCam() {
 
 }
 void A3Engine::_changeToFreeCam() {
+    //create freecam and set position to predetermined starting location
     _camera = new CSCI441::FreeCam();
-    _camera->setPosition( glm::vec3( WORLD_SIZE, 40, WORLD_SIZE ) ); // give the camera a scenic starting point
-    //_freeCam->computeViewMatrix();  // TODO #4 remove this line
-    _camera->setTheta( -M_PI / 4.0f );                              // and a nice view
+    _camera->setPosition( glm::vec3( WORLD_SIZE, 40, WORLD_SIZE ) );
+
+    //assign camera view
+    _camera->setTheta( -M_PI / 4.0f );
     _camera->setPhi( M_PI / 2.8f );
-    _camera->recomputeOrientation();                                   // orient the camera based on direction
+    _camera->recomputeOrientation();
 }
 
 void A3Engine::_changeToArcBallCam() {
@@ -414,7 +427,7 @@ void A3Engine::_cleanupBuffers() {
 
 //*************************************************************************************
 //
-// Rendering / Drawing Functions - this is where the magic happens!
+// Rendering / Drawing Functions
 
 void A3Engine::_renderScene(glm::mat4 viewMtx, glm::mat4 projMtx) const {
     // use our lighting shader program
@@ -432,21 +445,20 @@ void A3Engine::_renderScene(glm::mat4 viewMtx, glm::mat4 projMtx) const {
     glDrawElements(GL_TRIANGLES, _numGroundPoints, GL_UNSIGNED_SHORT, (void*)0);
     //// END DRAWING THE GROUND PLANE ////
 
-    //DRAWING THE PLANE
+    ////BEGIN DRAWING THE PLANE////
+    //create model matrix and translate to plane location
     glm::mat4 modelMtx(1.0f);
-    // we are going to cheat and use our look at point to place our plane so that it is always in view
     modelMtx = glm::translate( modelMtx, _plane->_location );
-    // rotate the plane with our camera theta direction (we need to rotate the opposite direction so that we always look at the back)
-    float pie2 = M_PI / 2.0f;
 
+    //rotate the plane to the correct position
+    float pie2 = M_PI / 2.0f;
     modelMtx = glm::rotate( modelMtx, -_plane->_direction - pie2, CSCI441::Y_AXIS );
-    // rotate the plane with our camera phi direction
     modelMtx = glm::rotate( modelMtx,  pie2, CSCI441::X_AXIS );
     // draw our plane now
     _plane->drawPlane( modelMtx, viewMtx, projMtx );
+    ////END DRAWING THE PLANE////
 
-
-    //// BEGIN DRAWING THE BUOYS ////
+    //// BEGIN DRAWING THE BUOYS, PYRAMIDS, AND BUILDINGS ////
 
     for( const PyramidData& currentPyramid : _pyramids ) {
         /// VAO STUFF
@@ -472,7 +484,7 @@ void A3Engine::_renderScene(glm::mat4 viewMtx, glm::mat4 projMtx) const {
         glBindVertexArray(_buildingVAO);
         glDrawElements(GL_TRIANGLES, _numGroundPoints, GL_UNSIGNED_SHORT, (void*)0);
     }
-    //// END DRAWING THE BUOYS ////
+    //// END DRAWING THE BUOYS, PYRAMIDS, AND BUILDINGS ////
 
     _raft->_drawRaft(viewMtx, projMtx);
 
@@ -493,12 +505,15 @@ void A3Engine::_updateScene() {
     }
     // turn right
     if( _keys[GLFW_KEY_D] ) {
+        //select current vehicle
         if (_currVehicle == _raft) {
+            //move vehicle
             _raft->_rotateRight();
             _raft->_paddleForwardLeft();
 
             _currVehicle->_direction = -_raft->_angle;
 
+            //move camera if FPP
             if(FFPToggle){
                 _cameraFFP->setTheta(_currVehicle->_direction);
                 _cameraFFP->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
@@ -507,9 +522,11 @@ void A3Engine::_updateScene() {
         }
 
         if (_currVehicle == _car){
+            //moe vehicle
             _car->_rotateRight();
             _currVehicle->_direction = -_car->_angle;
 
+            //move camera if FPP
             if(FFPToggle){
                 _cameraFFP->setTheta(_currVehicle->_direction);
                 _cameraFFP->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
@@ -519,13 +536,14 @@ void A3Engine::_updateScene() {
 
 
         if (_currVehicle == _plane) {
-
-
+            //move vehicle
             _currVehicle->_direction += _plane->speed / 5.0f;
             _plane->_direction += _plane->speed / 5.0f;
+            //reset angle if plane makes a full circle
             if (_plane->_direction > M_PI * 2.0f) {
                 _plane->_direction -= M_PI * 2.0f;
             }
+            //move camera if FPP
             if(FFPToggle){
                 _cameraFFP->setTheta(_currVehicle->_direction - M_PI/2);
                 _cameraFFP->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
@@ -536,11 +554,13 @@ void A3Engine::_updateScene() {
     // turn left
     if( _keys[GLFW_KEY_A] ) {
         if(_currVehicle == _raft) {
+            //move vehicle
             _raft->_rotateLeft();
             _raft->_paddleForwardRight();
 
             _currVehicle->_direction = -_raft->_angle;
 
+            //move camera if FPP
             if(FFPToggle){
                 _cameraFFP->setTheta(_currVehicle->_direction);
                 _cameraFFP->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
@@ -549,9 +569,11 @@ void A3Engine::_updateScene() {
         }
 
         if (_currVehicle == _car){
+            //move vehicle
             _car->_rotateLeft();
             _currVehicle->_direction = -_car->_angle;
 
+            //move camera if FPP
             if(FFPToggle){
                 _cameraFFP->setTheta(_currVehicle->_direction);
                 _cameraFFP->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
@@ -560,12 +582,14 @@ void A3Engine::_updateScene() {
         }
 
         if(_currVehicle == _plane) {
-
+            //move vehicle
             _currVehicle->_direction -= _plane->speed / 5.0f;
             _plane->_direction -= _plane->speed / 5.0f;
+            //reset angle if plane makes a full circle
             if (_plane->_direction < 0.0f) {
                 _plane->_direction += M_PI * 2.0f;
             }
+            //move camera if FPP
             if(FFPToggle){
                 _cameraFFP->setTheta(_currVehicle->_direction - M_PI/2);
                 _cameraFFP->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
@@ -575,6 +599,7 @@ void A3Engine::_updateScene() {
     }
     // go forward
     if( _keys[GLFW_KEY_W] ) {
+        //select current vehicle
         if(_currVehicle == _raft) {
             _raft->_moveForward(WORLD_SIZE);
             _raft->_paddleForwardLeft();
@@ -589,7 +614,7 @@ void A3Engine::_updateScene() {
             _car->_moveForward(WORLD_SIZE);
         }
 
-        // update lookatPoint and recompute orientation
+        // update lookAt Point and recompute orientation
         _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y , _currVehicle->_location.z));
         _camera->recomputeOrientation();
         if(FFPToggle){
@@ -600,6 +625,7 @@ void A3Engine::_updateScene() {
     }
     // go backward
     if( _keys[GLFW_KEY_S] ) {
+        //select current vehicle
         if(_currVehicle == _raft){
             _raft->_moveBackward(WORLD_SIZE);
             _raft->_paddleBackward();
@@ -613,20 +639,18 @@ void A3Engine::_updateScene() {
             _plane->flyBackward();
         }
 
+        // update lookAt Point and recompute orientation
         _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y , _currVehicle->_location.z));
         _camera->recomputeOrientation();
         if(FFPToggle){
             _cameraFFP->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5, _currVehicle->_location.z));
             _cameraFFP->recomputeOrientation();
         }
-        // update lookout point and recomputer orientation
-
     }
 
     if( _keys[GLFW_KEY_1]){
+        //change current vehicle to raft, update camera if FPP
         _currVehicle = _raft;
-
-
         if(FFPToggle){
             _cameraFFP->setTheta(_currVehicle->_direction);
             _cameraFFP->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
@@ -636,10 +660,10 @@ void A3Engine::_updateScene() {
     }
 
     if( _keys[GLFW_KEY_2]){
+        //change current vehicle to plane, update camera if FPP
         _currVehicle = _plane;
         _currVehicle->_location = _plane->_location;
         _currVehicle->_direction = _plane->_direction;
-
         if(FFPToggle){
             _cameraFFP->setTheta(_currVehicle->_direction - M_PI/2);
             _cameraFFP->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
@@ -649,9 +673,8 @@ void A3Engine::_updateScene() {
         _camera->recomputeOrientation();
     }
     if( _keys[GLFW_KEY_3]){
+        //change current vehicle to raft, update camera if FPP
         _currVehicle = _car;
-
-
         if(FFPToggle){
             _cameraFFP->setTheta(_currVehicle->_direction);
             _cameraFFP->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));
@@ -662,18 +685,22 @@ void A3Engine::_updateScene() {
     }
 
     if(_keys[GLFW_KEY_4]){
+        //change camera to arc ball cam
         _changeToArcBallCam();
         _camera->recomputeOrientation();
     }
 
     if(_keys[GLFW_KEY_5]){
+        //change camera to free cam
         _changeToFreeCam();
         _camera->recomputeOrientation();
     }
 
     if(_keys[GLFW_KEY_6]){
+        //change camera tp FPP cam
         _changeToFFPCam();
 
+        //set appropriate theta and lookAt point depending on vehicle
         if(_currVehicle == _raft || _currVehicle == _car) {
             _cameraFFP->setTheta(_currVehicle->_direction);
             _cameraFFP->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y + 5 , _currVehicle->_location.z));

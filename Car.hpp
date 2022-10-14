@@ -16,36 +16,27 @@ public:
 
     void _drawCar(glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx);
 
+    //movement
     void _moveForward(GLfloat WORLD_SIZE);
-
     void _moveBackward(GLfloat WORLD_SIZE);
-
     void _rotateRight();
-
     void _rotateLeft();
 
     GLfloat _getPositionX();
-
     GLfloat _getPositionY();
 
+    //car state values
     GLfloat _positionX;
-
     GLfloat _positionZ;
-
     GLfloat _angle;
 
+    //model transformation values
     GLfloat _wheelAngle;
-
     glm::vec3 _scaleBody;
-
     glm::vec3 _scaleBody2;
-
     glm::vec3 _translateBody;
-
     glm::vec3 _translateBody2;
-
     glm::vec3 _translateWheelsLR;
-
     glm::vec3 _translateWheelsUD;
 
 
@@ -61,15 +52,13 @@ private:
         GLint materialColor;
     } _shaderProgramUniformLocations;
 
+    //model colors
     glm::vec3 _wheelColor;
-
     glm::vec3 _bodyColor;
 
-
+    //draw functions
     void _drawWheels(glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx) const;
-
     void _drawBody(glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx) const;
-
     void _drawBody2(glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx) const;
 
     void _computeAndSendMatrixUniforms(glm::mat4 modelMtx, glm::mat4 viewMtx, glm::mat4 projMtx) const;
