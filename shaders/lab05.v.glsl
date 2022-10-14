@@ -1,5 +1,8 @@
 #version 410 core
 
+
+
+
 // uniform inputs
 uniform mat4 mvpMatrix;                 // the precomputed Model-View-Projection Matrix
 uniform mat3 normMatrix;
@@ -18,6 +21,8 @@ in vec3 vecNormal;
 layout(location = 0) out vec3 color;    // color to apply to this vertex
 
 void main() {
+    color = vec3(0,0,0);
+
     // transform & output the vertex in clip space
     gl_Position = mvpMatrix * vec4(vPos, 1.0);
 
@@ -38,5 +43,30 @@ void main() {
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), 3);
     vec3 specularComponent = specularStrength * spec * lightColor;
 
-    color = materialColor * (ambientComponent + diffuseComponent + specularComponent);
+    color += (ambientComponent + diffuseComponent + specularComponent) * 0.75;
+
+
+    vec3 lightPos = vec3(-55,30,-55);
+
+    vec3 lightDir2 = normalize(lightPos - worldCords);
+    // diffuse shading
+    float diff = max(dot(trueVecNormal, lightDir2), 0.0);
+    // specular shading
+    vec3 reflectDir2 = reflect(-lightDir2, trueVecNormal);
+    float spec2 = pow(max(dot(viewDir, reflectDir2), 0.0), 3);
+    // attenuation
+    float distance    = length(lightPos - worldCords);
+    float attenuation = 1.0 / (1 + 2 * distance +
+                 1 * (distance * distance));
+    // combine results
+    vec3 ambient  = vec3(1.0,1.0,1.0) * 0.15;
+    vec3 diffuse  = vec3(1.0,1.0,1.0) * diff;
+    vec3 specular = vec3(1.0,1.0,1.0) * spec2;
+    ambient  *= attenuation * 200;
+    diffuse  *= attenuation * 500;
+    specular *= attenuation * 600;
+
+    color += (ambient + diffuse + specular);
+
+    color = materialColor * color;
 }

@@ -246,9 +246,9 @@ void A3Engine::_createGroundBuffers() {
             { 1.0f, 0.0f,  1.0f,1.0,1.0,1.0}
     };
 
-    GLushort indices[4] = {0,1,2,3};
+    GLushort indices[6] = {0,3,2,0,3,1};
 
-    _numGroundPoints = 4;
+    _numGroundPoints = 6;
 
     glGenVertexArrays(1, &_groundVAO);
     glBindVertexArray(_groundVAO);
@@ -346,9 +346,13 @@ void A3Engine::_setupScene() {
     glm::vec3 lightDirection = glm::vec3(-1,-1,-1);
     glm::vec3 lightColor = glm::vec3(1,1,1);
 
+
+
     glProgramUniform3fv(_lightingShaderProgram->getShaderProgramHandle(), _lightingShaderUniformLocations.lightDirection,1,&lightDirection[0]);
 
     glProgramUniform3fv(_lightingShaderProgram->getShaderProgramHandle(), _lightingShaderUniformLocations.lightColor,1,&lightColor[0]);
+
+
 
 }
 void A3Engine::_changeToFFPCam() {
@@ -425,7 +429,7 @@ void A3Engine::_renderScene(glm::mat4 viewMtx, glm::mat4 projMtx) const {
     glUniform3fv(_lightingShaderUniformLocations.materialColor, 1, &groundColor[0]);
 
     glBindVertexArray(_groundVAO);
-    glDrawElements(GL_TRIANGLE_STRIP, _numGroundPoints, GL_UNSIGNED_SHORT, (void*)0);
+    glDrawElements(GL_TRIANGLES, _numGroundPoints, GL_UNSIGNED_SHORT, (void*)0);
     //// END DRAWING THE GROUND PLANE ////
 
     //DRAWING THE PLANE
@@ -773,7 +777,6 @@ void A3Engine::_computeAndSendMatrixUniforms(glm::mat4 modelMtx, glm::mat4 viewM
     _lightingShaderProgram->setProgramUniform(_lightingShaderUniformLocations.normMtx, normalMtx);
 
     _lightingShaderProgram->setProgramUniform(_lightingShaderUniformLocations.cameraPosition, _camera->getPosition());
-
 
 }
 
