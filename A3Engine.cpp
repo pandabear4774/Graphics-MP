@@ -306,7 +306,7 @@ void A3Engine::_generateEnvironment() {
                 glm::mat4 modelMatrix = transToSpotMtx * scaleToHeightMtx;
 
                 // compute random color
-                glm::vec3 color( getRand(), getRand(), getRand() );
+                glm::vec3 color( 1,1,1 );
                 // store buoy properties
                 PyramidData currentPyramid = {modelMatrix, color};
                 _pyramids.emplace_back( currentPyramid );
@@ -462,12 +462,6 @@ void A3Engine::_renderScene(glm::mat4 viewMtx, glm::mat4 projMtx) const {
     }
 
     for( const BuildingData& currentBuilding : _buildings ) {
-        //_computeAndSendMatrixUniforms(currentBuilding.modelMatrix, viewMtx, projMtx);
-
-        //glUniform3fv(_lightingShaderUniformLocations.materialColor, 1, &currentBuilding.color[0]);
-
-        //CSCI441::drawSolidCube(1.0);
-
         /// VAO STUFF
         glm::mat4 groundModelMtx = currentBuilding.modelMatrix;
         _computeAndSendMatrixUniforms(groundModelMtx, viewMtx, projMtx);
@@ -616,7 +610,7 @@ void A3Engine::_updateScene() {
         }
 
         if(_currVehicle == _plane){
-            _plane->flyForward();
+            _plane->flyBackward();
         }
 
         _camera->setLookAtPoint(glm::vec3(_currVehicle->_location.x,_currVehicle->_location.y , _currVehicle->_location.z));

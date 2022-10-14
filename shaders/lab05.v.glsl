@@ -27,7 +27,7 @@ void main() {
     gl_Position = mvpMatrix * vec4(vPos, 1.0);
 
     //ambient
-    float ambientStrength = 0.15;
+    float ambientStrength = 0.05;
     vec3 ambientComponent = ambientStrength * lightColor;
 
     //diffuse
@@ -36,37 +36,69 @@ void main() {
     vec3 diffuseComponent = lightColor * max(dot(reverseLightVector, trueVecNormal), 0);
 
     //specular
-    float specularStrength = 0.2;
+    float specularStrength = 0.1;
     vec3 worldCords = vec3(modelMatrix * vec4(vPos,1.0));
     vec3 viewDir = normalize(cameraPosition - worldCords);
     vec3 reflectDir = reflect(-reverseLightVector, trueVecNormal);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 3);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 2);
     vec3 specularComponent = specularStrength * spec * lightColor;
 
-    color += (ambientComponent + diffuseComponent + specularComponent) * 0.75;
+    color += (ambientComponent + diffuseComponent + specularComponent) / 4;
 
 
-    vec3 lightPos = vec3(-55,30,-55);
+    vec3 lightPos = vec3(-60,30,-60);
 
     vec3 lightDir2 = normalize(lightPos - worldCords);
     // diffuse shading
-    float diff = max(dot(trueVecNormal, lightDir2), 0.0);
+    float diff = max(dot(vecNormal, lightDir2), 0.0);
     // specular shading
-    vec3 reflectDir2 = reflect(-lightDir2, trueVecNormal);
+    vec3 reflectDir2 = reflect(-lightDir2, vecNormal);
     float spec2 = pow(max(dot(viewDir, reflectDir2), 0.0), 3);
     // attenuation
     float distance    = length(lightPos - worldCords);
-    float attenuation = 1.0 / (1 + 2 * distance +
-                 1 * (distance * distance));
+    float attenuation = 1.0 / (1 + 0.005 * distance +
+                 0.008 * (distance * distance));
     // combine results
     vec3 ambient  = vec3(1.0,1.0,1.0) * 0.15;
     vec3 diffuse  = vec3(1.0,1.0,1.0) * diff;
     vec3 specular = vec3(1.0,1.0,1.0) * spec2;
-    ambient  *= attenuation * 200;
-    diffuse  *= attenuation * 500;
-    specular *= attenuation * 600;
+    ambient  *= attenuation;
+    diffuse  *= attenuation * 4;
+    specular *= attenuation / 5;
 
     color += (ambient + diffuse + specular);
+
+
+    //spot light
+    vec3 spotLightPosition = vec3(0,20,0);
+    vec3 spotLightDirection = vec3(0,-1,0);
+    float cutoffAngle = 0.8;
+
+    vec3 lightDir3 = normalize(spotLightPosition - worldCords);
+
+    float theta = dot(spotLightDirection, normalize(-lightDir3));
+
+    if(theta > cutoffAngle){
+        // diffuse shading
+        float diff2 = max(dot(vecNormal, lightDir3), 0.0);
+        // specular shading
+        vec3 reflectDir3 = reflect(-lightDir3, trueVecNormal);
+        float spec3 = pow(max(dot(viewDir, reflectDir3), 0.0), 3);
+        // attenuation
+        float distance2    = length(spotLightPosition - worldCords);
+        float attenuation2 = 1.0 / (1 + 2 * distance2 +
+                     1 * (distance2 * distance2));
+        // combine results
+        vec3 ambient2  = vec3(1.0,1.0,1.0) * 0.15;
+        vec3 diffuse2  = vec3(1.0,1.0,1.0) * diff2;
+        vec3 specular2 = vec3(1.0,1.0,1.0) * spec3;
+        ambient2  *=  attenuation2 * 400;
+        diffuse2  *= attenuation2 * 600;
+        specular2 *= attenuation2 * 200;
+
+        color += (diffuse2 + specular2 + ambient2);
+    }
+
 
     color = materialColor * color;
 }
